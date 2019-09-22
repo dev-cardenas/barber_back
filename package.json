@@ -1,0 +1,13 @@
+{
+  "name": "goBarberBack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:dev-cardenas/goBarberBack.git",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

@@ -12,7 +12,9 @@ services:
     command: yarn dev
     volumes:
       - .:/usr/src/
-      - /usr/src/node_modules
+      - ./node_modules:/usr/src/node_modules
+    links:
+      - postgresgobarber
     networks:
       - gobarberbackend
 

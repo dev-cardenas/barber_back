@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { compareDate } from '../../helpers/moment';
+import { startOfHours, parseISO, isBefore } from 'date-fns';
 import Appointment from '../models/Appointment';
 import User from '../models/User';
 
@@ -27,10 +27,31 @@ class AppointmentController {
         .json({ error: 'You can only appointments with providers' });
     }
 
-    if (!compareDate(date)) {
-      res.status(404).json({
-        error: 'The date has expired or require a minimum of 1:30 pm to dial',
-      });
+    /**
+     * Check for past date
+     */
+
+    const hourStart = startOfHours(parseISO(date));
+    if (isBefore(hourStart, new Date())) {
+      return res.status(400).json({ error: 'Past dates are not permitted' });
+    }
+
+    /**
+     * Check date availability
+     */
+
+    const checkAvailability = await Appointment.findOne({
+      where: {
+        provider_id,
+        canceled_at: null,
+        date: hourStart,
+      },
+    });
+
+    if (checkAvailability) {
+      return res
+        .status(400)
+        .json({ error: 'Appointment date is not available' });
     }
 
     const appointment = await Appointment.create({

@@ -4,6 +4,7 @@ services:
     build: .
     depends_on:
       - postgresgobarber
+      - mongogobarber
     environment:
       NODE_ENV: development
       PORT: 5000
@@ -15,6 +16,7 @@ services:
       - ./node_modules:/usr/src/node_modules
     links:
       - postgresgobarber
+      - mongogobarber
     networks:
       - gobarberbackend
 
@@ -30,6 +32,18 @@ services:
       - ./src/database:/var/lib/postgresql/data
     networks:
       - gobarberbackend
+
+  mongogobarber:
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./src/database/mongo:/var/lib/mongodb/data
+    networks:
+      - gobarberbackend
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: docker
 
 networks:
   gobarberbackend:

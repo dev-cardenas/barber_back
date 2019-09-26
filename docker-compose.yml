@@ -41,9 +41,10 @@ services:
       - ./src/database/mongo:/var/lib/mongodb/data
     networks:
       - gobarberbackend
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: docker
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: admin
+    #   MONGO_INITDB_ROOT_PASSWORD: docker
+    #   MONGO_INITDB_DATABASE: gobarber
 
 networks:
   gobarberbackend:

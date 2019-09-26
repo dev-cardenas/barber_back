@@ -1,8 +1,10 @@
 import * as Yup from 'yup';
-import { startOfHours, parseISO, isBefore } from 'date-fns';
+import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import es from 'date-fns/locale/es';
 import Appointment from '../models/Appointment';
 import User from '../models/User';
 import File from '../models/File';
+import Notification from '../schemas/Notification';
 
 class AppointmentController {
   async index(req, res) {
@@ -62,7 +64,7 @@ class AppointmentController {
      * Check for past date
      */
 
-    const hourStart = startOfHours(parseISO(date));
+    const hourStart = startOfHour(parseISO(date));
     if (isBefore(hourStart, new Date())) {
       return res.status(400).json({ error: 'Past dates are not permitted' });
     }
@@ -89,6 +91,18 @@ class AppointmentController {
       user_id: req.user_id,
       provider_id,
       date,
+    });
+
+    /**
+     * Notify appointment provider
+     */
+    const user = await User.findByPk(req.user_id);
+    const formattedDate = format(hourStart, "dd 'de' MMMM', a las' H:mm' hs'", {
+      locate: es,
+    });
+    await Notification.create({
+      content: `Tienes una cita de ${user.name} para el dia ${formattedDate}`,
+      user: provider_id,
     });
 
     return res.json(appointment);

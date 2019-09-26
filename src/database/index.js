@@ -25,7 +25,7 @@ class Database {
 
   mongo() {
     this.mongoConnection = mongoose.connect(
-      'mongodb://root:docker@mongogobarber:27017/gobarber',
+      'mongodb://mongogobarber:27017/gobarber',
       { useNewUrlParser: true, useUnifiedTopology: true }
     );
   }

@@ -61,6 +61,13 @@ class AppointmentController {
     }
 
     /**
+     * Check if user and provider iquals
+     */
+    if (provider_id === req.user_id) {
+      return res.status(400).json({ error: "You can't schedule yourself" });
+    }
+
+    /**
      * Check for past date
      */
 

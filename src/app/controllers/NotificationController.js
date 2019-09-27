@@ -28,7 +28,7 @@ class NotificationController {
   async update(req, res) {
     const { id } = req.params;
     if (!id) {
-      return res.status(400).json({ error: 'Not return id' });
+      return res.status(400).json({ error: 'Not return params' });
     }
 
     const notification = await Notification.findByIdAndUpdate(

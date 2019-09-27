@@ -6,6 +6,8 @@ import User from '../models/User';
 import File from '../models/File';
 import Notification from '../schemas/Notification';
 
+import Mail from '../../lib/Mail';
+
 class AppointmentController {
   async index(req, res) {
     const { page = 1 } = req.params;
@@ -121,7 +123,15 @@ class AppointmentController {
       return res.status(400).json({ error: 'Not return params' });
     }
 
-    const appointment = await Appointment.findByPk(id);
+    const appointment = await Appointment.findByPk(id, {
+      include: [
+        {
+          model: User,
+          as: 'provider',
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
 
     if (appointment.user_id !== req.user_id) {
       return res.status(401).json({
@@ -140,6 +150,13 @@ class AppointmentController {
     appointment.canceled_at = new Date();
 
     await appointment.save();
+    const { provider } = appointment;
+
+    await Mail.sendMail({
+      to: `${provider.name} <${provider.email}>`,
+      subject: 'Cita cancelada',
+      text: 'Tienes una cita cancelada',
+    });
 
     return res.json(appointment);
   }

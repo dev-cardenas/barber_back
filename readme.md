@@ -19,5 +19,3 @@ all
 ```
 yarn sequelize db:migrate:undo:all
 ```
-
-## Hay que instalar express-async-errors && youch && dotenv

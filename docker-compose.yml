@@ -46,7 +46,7 @@ services:
   postgresgobarber:
     image: postgres
     ports:
-      - '5432:5432'
+      - '54321:5432'
     environment:
       # Postgress
       POSTGRES_HOST: 'postgresgobarber'

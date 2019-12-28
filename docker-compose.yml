@@ -54,7 +54,7 @@ services:
       POSTGRES_PASSWORD: 'docker'
       POSTGRES_DB: 'gobarber'
     volumes:
-      - ./src/database:/var/lib/postgresql/data
+      - ./src/database/db:/var/lib/postgresql_docker/data
     networks:
       - gobarberbackend
 

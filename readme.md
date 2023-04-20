@@ -3,19 +3,24 @@
 docker run --name database -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
 ```
 
-### Run migrations example
 ```
-yarn sequelize migration:create --name=create-users
-yarn sequelize db:migrate
+ yarn typeorm migration:run -c development -t each
 ```
 
-## Revert migration
+## Migrations
 
-last
+Run command
+
 ```
-yarn sequelize db:migrate:undo
+yarn typeorm migration:generate -n UsersAndTables
+yarn typeorm migration:run
+yarn typeorm migration:run -c development -t each // para correr uno a uno
 ```
-all
+
+### dev
+
 ```
-yarn sequelize db:migrate:undo:all
+yarn typeorm migration:generate ./src/database/migrations/create-db -d ./src/config/data-source.ts
+yarn typeorm migration:run -d ./src/config/data-source.ts
+yarn typeorm migration:revert -d ./src/config/data-source.ts
 ```

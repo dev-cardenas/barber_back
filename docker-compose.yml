@@ -1,84 +1,71 @@
 version: '3'
 services:
-  gobarber:
-    build: .
-    depends_on:
-      - postgresgobarber
-      - mongogobarber
-      - redisgobarber
-    environment:
-      PORT: 5000
-      APP_URL: 'http://localhost:5000'
-      NODE_ENV: 'development'
-      # Auth
-      APP_SECRET: 'c8d3bb3ca23c1c0da88d1af1c45a1dd4'
-      EXPIRES_IN: '1d'
-      # Postgress
-      POSTGRES_HOST: 'postgresgobarber'
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: 'docker'
-      POSTGRES_DB: 'gobarber'
-      # Mongo
-      MONGO_URL: 'mongodb://mongogobarber:27017/gobarber'
-      # Redis
-      REDIS_HOST: 'redisgobarber'
-      REDIS_PORT: 6379
-      # Mails
-      MAIL_HOST: 'smtp.mailtrap.io'
-      MAIL_PORT: 2525
-      MAIL_USER: 'a0d1365fe8afd5'
-      MAIL_PASS: 'ccb340c8050089'
-      # Sentry
-      SENTRY_DNS: ''
-    ports:
-      - '5000:5000'
-    command: yarn dev
-    volumes:
-      - .:/usr/src/
-      - ./node_modules:/usr/src/node_modules
-    links:
-      - postgresgobarber
-      - mongogobarber
-      - redisgobarber
-    networks:
-      - gobarberbackend
+  # gobarber:
+  #   build: .
+  #   depends_on:
+  #     - postgresgobarber
+  #     - mongogobarber
+  #     - redisgobarber
+  #   environment:
+  #     PORT: 5000
+  #     APP_URL: 'http://localhost:5000'
+  #     NODE_ENV: 'development'
+  #     # Auth
+  #     APP_SECRET: 'c8d3bb3ca23c1c0da88d1af1c45a1dd4'
+  #     EXPIRES_IN: '1d'
+  #     # Postgress
+  #     POSTGRES_HOST: 'postgresgobarber'
+  #     POSTGRES_USER: 'postgres'
+  #     POSTGRES_PASSWORD: 'docker'
+  #     POSTGRES_DB: 'gobarber'
+  #     # Mongo
+  #     MONGO_URL: 'mongodb://mongogobarber:27017/gobarber'
+  #     # Redis
+  #     REDIS_HOST: 'redisgobarber'
+  #     REDIS_PORT: 6379
+  #     # Mails
+  #     MAIL_HOST: 'smtp.mailtrap.io'
+  #     MAIL_PORT: 2525
+  #     MAIL_USER: 'a0d1365fe8afd5'
+  #     MAIL_PASS: 'ccb340c8050089'
+  #     # Sentry
+  #     SENTRY_DNS: ''
+  #   ports:
+  #     - '5000:5000'
+  #   command: yarn dev
+  #   volumes:
+  #     - .:/usr/src/
+  #     - ./node_modules:/usr/src/node_modules
+  #   links:
+  #     - postgresgobarber
+  #     - mongogobarber
+  #     - redisgobarber
+  #   networks:
+  #     - barberbackend
 
-  postgresgobarber:
+  postgres_barber:
     image: postgres
     ports:
-      - '54321:5432'
+      - '54329:5432'
     environment:
       # Postgress
-      POSTGRES_HOST: 'postgresgobarber'
+      # POSTGRES_HOST: 'postgres_barber'
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'docker'
-      POSTGRES_DB: 'gobarber'
+      POSTGRES_DB: 'barber'
     volumes:
       - ./src/database/db:/var/lib/postgresql_docker/data
     networks:
-      - gobarberbackend
+      - barberbackend
 
-  redisgobarber:
+  redis_barber:
     image: redis:alpine
     container_name: cache
     ports:
       - '6379:6379'
     networks:
-      - gobarberbackend
-
-  mongogobarber:
-    image: mongo
-    ports:
-      - '27017:27017'
-    volumes:
-      - ./src/database/mongo:/var/lib/mongodb/data
-    networks:
-      - gobarberbackend
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: admin
-    #   MONGO_INITDB_ROOT_PASSWORD: docker
-    #   MONGO_INITDB_DATABASE: gobarber
+      - barberbackend
 
 networks:
-  gobarberbackend:
+  barberbackend:
     driver: bridge

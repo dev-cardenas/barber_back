@@ -142,3 +142,13 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/node,linux,windows
+
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
+dist/
+.env
+

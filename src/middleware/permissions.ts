@@ -32,7 +32,7 @@ export function is(rolesRoutes: string[]) {
 
     const user = await UserRepository().findOne({
       where: { id_user: id_user },
-      relations: ['user_role'],
+      relations: ['user_roles'],
     });
 
     if (!user) {

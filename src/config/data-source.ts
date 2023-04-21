@@ -22,7 +22,7 @@ export const AppDataSource = new DataSource({
   database: DB_NAME,
   namingStrategy: new SnakeNamingStrategy(),
   synchronize: true,
-  logging: true,
+  logging: false,
   logger: 'advanced-console',
   entities,
   // entities: [__dirname + "../database/entities/*{.js,.ts}"],

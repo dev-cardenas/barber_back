@@ -1,13 +1,9 @@
-import { In } from "typeorm";
-import User from "../database/entities/User";
-import UserPermissions from "../database/entities/UserPermissions";
-import UserRoles from "../database/entities/UserRoles";
+import { In } from 'typeorm';
+import User from '../database/entities/User';
+import UserPermissions from '../database/entities/UserPermissions';
+import UserRoles from '../database/entities/UserRoles';
 
-import {
-  UserPermissionsRepository,
-  UserRolesRepository,
-  UserRepository,
-} from "../repositories";
+import { UserPermissionsRepository, UserRolesRepository, UserRepository } from '../repositories';
 
 type UserACLRequest = {
   id_user: string;
@@ -16,17 +12,13 @@ type UserACLRequest = {
 };
 
 export class CreateUserAccessControlListService {
-  async execute({
-    id_user,
-    roles,
-    permissions,
-  }: UserACLRequest): Promise<User | Error> {
+  async execute({ id_user, roles, permissions }: UserACLRequest): Promise<User | Error> {
     const repoUser = UserRepository();
 
     const user = await repoUser.findOne({ where: { id_user } });
 
     if (!user) {
-      return new Error("User does not exists!");
+      return new Error('User does not exists!');
     }
 
     const permissionsExists = await UserPermissionsRepository().findBy({
@@ -34,7 +26,7 @@ export class CreateUserAccessControlListService {
     });
 
     const rolesExists = await UserRolesRepository().findBy({
-      user_role: In(roles),
+      id_user_roles: In(roles),
     });
 
     user.user_permissions = permissionsExists;

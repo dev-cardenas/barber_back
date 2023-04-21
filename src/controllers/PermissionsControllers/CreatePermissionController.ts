@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { CreatePermissionService } from "../services/CreatePermissionService";
+import { Request, Response } from 'express';
+import { CreatePermissionService } from 'services/PermissionsServices/CreatePermissionsService';
 
 export class CreatePermissionController {
   async handle(request: Request, response: Response) {
@@ -10,7 +10,7 @@ export class CreatePermissionController {
     const result = await createPermissionService.execute({ name, description });
 
     if (result instanceof Error) {
-      return response.status(400).json(result.message);
+      return response.status(400).json({ message: result.message });
     }
 
     return response.json(result);

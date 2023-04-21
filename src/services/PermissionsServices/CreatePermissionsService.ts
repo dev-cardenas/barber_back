@@ -1,10 +1,6 @@
 import UserPermissions from 'database/entities/UserPermissions';
 import { UserPermissionsRepository } from 'repositories/index';
-
-type PermissionRequest = {
-  name: string;
-  description: string;
-};
+import { PermissionRequest } from './PermissionsServices';
 
 export class CreatePermissionService {
   async execute({ name, description }: PermissionRequest): Promise<UserPermissions | Error> {

@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { CreateRolePermissionService } from "../services/CreateRolePermissionService";
+import { Request, Response } from 'express';
+import { CreateRolePermissionService } from '../services/CreateRolePermissionService';
 
 export class CreateRolePermissionController {
   async handle(request: Request, response: Response) {
@@ -14,7 +14,7 @@ export class CreateRolePermissionController {
     });
 
     if (result instanceof Error) {
-      return response.status(400).json(result.message);
+      return response.status(400).json({ message: result.message });
     }
 
     return response.json(result);

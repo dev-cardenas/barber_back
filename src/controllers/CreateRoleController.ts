@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { CreateRoleService } from "../services/CreateRoleService";
+import { Request, Response } from 'express';
+import { CreateRoleService } from '../services/CreateRoleService';
 
 export class CreateRoleController {
   async handle(request: Request, response: Response) {
@@ -10,7 +10,7 @@ export class CreateRoleController {
     const result = await createRoleService.execute({ user_role, description });
 
     if (result instanceof Error) {
-      return response.status(400).json(result.message);
+      return response.status(400).json({ message: result.message });
     }
 
     return response.json(result);

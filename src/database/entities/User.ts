@@ -6,7 +6,7 @@ import {
   ManyToOne,
   UpdateDateColumn,
   ManyToMany,
-  JoinColumn,
+  JoinTable,
   OneToMany,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
@@ -56,11 +56,11 @@ class User {
 
   // @Column()
   @ManyToMany(() => UserRoles)
-  @JoinColumn({ name: 'user_user_roles' })
+  @JoinTable({ name: 'user_user_roles' })
   user_roles?: UserRoles[];
 
   @ManyToMany(() => UserPermissions)
-  @JoinColumn({ name: 'user_user_permissions' })
+  @JoinTable({ name: 'user_user_permissions' })
   user_permissions?: UserPermissions[];
 
   @ManyToOne(() => Company, (company) => company.users)

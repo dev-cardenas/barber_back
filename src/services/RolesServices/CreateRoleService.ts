@@ -1,10 +1,6 @@
 import UserRoles from 'database/entities/UserRoles';
 import { UserRolesRepository } from 'repositories/index';
-
-type RoleRequest = {
-  user_role: string;
-  description: string;
-};
+import { RoleRequest } from './RolesService';
 
 export class CreateRoleService {
   async execute({ user_role, description }: RoleRequest): Promise<UserRoles | Error> {

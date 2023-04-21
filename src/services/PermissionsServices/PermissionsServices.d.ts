@@ -3,6 +3,8 @@ export type PermissionRequest = {
   description: string;
 };
 
-export type PermissionRequestUpdate = PermissionRequest & {
+export type GetPermissionRequest = {
   id_user_permissions: string;
 };
+
+export type PermissionRequestUpdate = PermissionRequest & GetPermissionRequest;

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { GetAllPermissionsService } from 'services/PermissionsServices/index';
+import { GetAllRoleService } from 'services/RolesServices/index';
 
-export class GetAllPermissionController {
+export class GetAllRolesController {
   async handle(request: Request, response: Response) {
-    const getAllPermissionsServices = new GetAllPermissionsService();
+    const getAllRolesServices = new GetAllRoleService();
 
-    const result = await getAllPermissionsServices.execute();
+    const result = await getAllRolesServices.execute();
 
     if (result instanceof Error) {
       return response.status(400).json({ message: result.message });

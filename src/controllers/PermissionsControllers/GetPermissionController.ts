@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { GetPermissionsService } from 'services/PermissionsServices/GetPermissionsService';
+import { GetPermissionsService } from 'services/PermissionsServices/index';
 
 export class GetPermissionController {
   async handle(request: Request, response: Response) {

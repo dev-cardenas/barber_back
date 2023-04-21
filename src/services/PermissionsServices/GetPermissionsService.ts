@@ -1,9 +1,6 @@
 import UserPermissions from 'database/entities/UserPermissions';
 import { UserPermissionsRepository } from 'repositories/index';
-
-type GetPermissionRequest = {
-  id_user_permissions: string;
-};
+import { GetPermissionRequest } from './PermissionsServices';
 
 export class GetPermissionsService {
   async execute({ id_user_permissions }: GetPermissionRequest): Promise<UserPermissions | Error> {
@@ -12,7 +9,7 @@ export class GetPermissionsService {
     const permissions = await repoPermissions.findOne({ where: { id_user_permissions } });
 
     if (!permissions) {
-      return new Error('Permissions does not exists!');
+      return new Error('Permission does not exists!');
     }
 
     return permissions;

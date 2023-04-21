@@ -3,7 +3,7 @@ import User from '../database/entities/User';
 import UserPermissions from '../database/entities/UserPermissions';
 import UserRoles from '../database/entities/UserRoles';
 
-import { UserPermissionsRepository, UserRolesRepository, UserRepository } from '../repositories';
+import { UserPermissionsRepository, UserRolesRepository, UserRepository } from 'repositories/index';
 
 type UserACLRequest = {
   id_user: string;

@@ -1,14 +1,26 @@
 export const permissions = [
   {
-    name: 'create_product',
-    description: 'Creator products',
+    user_permission: 'read',
+    description: 'It is a permission to read resource',
   },
   {
-    name: 'edit_product',
-    description: 'Edit product',
+    user_permission: 'edit',
+    description: 'It is a permission to edit resource',
   },
   {
-    name: 'list_product',
-    description: 'List product',
+    user_permission: 'create',
+    description: 'It is a permission to create resource',
   },
-];
+  {
+    user_permission: 'delete',
+    description: 'It is a permission to delete resource',
+  },
+  {
+    user_permission: 'update',
+    description: 'It is a permission to update',
+  },
+  {
+    user_permission: 'admin',
+    description: 'It is a permission to do everything',
+  },
+]

@@ -2,5 +2,7 @@
   "parser": "@typescript-eslint/parser",
   "extends": ["plugin:prettier/recommended", "@rocketseat/eslint-config/node"],
   "parserOptions": { "ecmaVersion": 2021, "sourceType": "module" },
-  "rules": {}
+  "rules": {
+    "camelcase": "off"
+  }
 }

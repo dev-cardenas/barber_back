@@ -19,6 +19,7 @@ model User {
   email                 String           @unique
   phone                 String?
   image                 String?
+  token                 String?
   whatsapp              String?
   is_blocked            Boolean          @default(false)
   password_hash         String

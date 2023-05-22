@@ -1,21 +1,15 @@
-import 'reflect-metadata';
-import 'express-async-errors';
-import * as dotenv from 'dotenv';
-import { app } from './app';
-import { loadDataInitDB } from './helpers/loadDataInitDB';
+import 'express-async-errors'
+import * as dotenv from 'dotenv'
+import { app } from './app'
 
-dotenv.config();
+dotenv.config()
 
-import { AppDataSource } from 'config/data-source';
+const port = parseInt(process.env.PORT) ?? 3333
 
-const port = process.env.PORT || 5000;
-
-AppDataSource.initialize()
-  .then(() => {
-    // here you can start to work with your database
-
-    console.log('Database initialized');
-    loadDataInitDB();
-    app.listen(port, () => console.log('Server is running in', port));
+app
+  .listen({
+    port,
   })
-  .catch((error) => console.log(error));
+  .then(() => {
+    console.log('HTTP server running on http://localhost:' + port)
+  })

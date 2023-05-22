@@ -1,7 +1,11 @@
-import { admins } from './admin';
-import { customers } from './customer';
-import { providers } from './provider';
-import { permissions } from './permissions';
-import { roles } from './roles';
+import { admins } from './admin'
+import { customers } from './customer'
+import { providers } from './provider'
+export * from './permissions'
+export * from './roles'
+export * from './typeUser'
+export * from './accountPlan'
+export * from './coinType'
+export * from './tax'
 
-export { admins, customers, providers, permissions, roles };
+export { admins, customers, providers }

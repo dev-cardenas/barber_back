@@ -1,33 +1,27 @@
-import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
-import Youch from 'youch';
+import fastify from 'fastify'
+import cors from '@fastify/cors'
+import jwtFastify from '@fastify/jwt'
 
-import { setupLogging } from './config';
-import router from './routes';
+import { authRoutes } from './useCases/auth/routes'
 
-export const app = express();
+const fastifyConfig = {
+  trustProxy: true,
+  logger: {
+    useLevelLabels: true,
+    level: 'warn',
+  },
+}
 
-setupLogging(app);
-app.use(cors());
+const app = fastify(fastifyConfig)
 
-app.use(express.json());
+app.register(jwtFastify, {
+  secret: process.env.SECRET_JWT ?? 'supersecret',
+})
 
-app.use('/api/v1', router);
+app.register(authRoutes)
 
-app.use(async (err: Error, request: Request, response: Response, next: NextFunction) => {
-  if (process.env.NODE_ENV === 'development') {
-    const errors = await new Youch(err, request).toJSON(); // toHTML
-    return response.status(500).json(errors);
-  }
+app.register(cors, {
+  origin: true, // All urls
+})
 
-  if (err instanceof Error) {
-    return response.status(400).json({
-      error: err.message,
-    });
-  }
-
-  return response.status(500).json({
-    status: 'error',
-    message: 'Internal Server Error',
-  });
-});
+export { app }

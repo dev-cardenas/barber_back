@@ -7,4 +7,4 @@ export const admins = [
     name: 'Admin',
     last_name: 'Admin',
   },
-];
+]

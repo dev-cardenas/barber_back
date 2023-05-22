@@ -37,6 +37,89 @@ model User {
   appointments_provider Appointments[]   @relation("appointments_provider")
   ticket_client         Ticket[]         @relation("ticket_client")
   ticket_provider       Ticket[]         @relation("ticket_provider")
+  ruc_client            RucClient?
+}
+
+model RucClient {
+  id_ruc_client String   @id @default(uuid())
+  name          String
+  ruc           String
+  address       String
+  is_delete     Boolean  @default(false)
+  created_at    DateTime @default(now())
+  update_at     DateTime @updatedAt
+  // relationship
+  user          User     @relation(fields: [user_id], references: [id_user])
+  user_id       String   @unique
+}
+
+model RucConfig {
+  id_ruc              String               @id @default(uuid())
+  ruc                 String
+  sign_digital_date   DateTime
+  version             String
+  business_name       String
+  fantasy_name        String
+  // timbrado numero
+  stamped_number      String
+  // timbrado Fecha
+  stamped_date        String
+  // tipo contribuyente
+  taxpayer_type       String
+  // tipoRegimen
+  regime_type         String
+  is_delete           Boolean              @default(false)
+  created_at          DateTime             @default(now())
+  update_at           DateTime             @updatedAt
+  // relationship
+  economic_activities EconomicActivities[]
+  establishments      Establishments[]
+  company             Company[]
+}
+
+model EconomicActivities {
+  id_economic_activities String      @id @default(uuid())
+  code                   String
+  description            String
+  is_delete              Boolean     @default(false)
+  created_at             DateTime    @default(now())
+  update_at              DateTime    @updatedAt
+  // relationship
+  ruc                    RucConfig[]
+}
+
+// see the doc https://www.npmjs.com/package/facturacionelectronicapy-xmlgen
+model Establishments {
+  id_establishments      String    @id @default(uuid())
+  code                   String
+  address                String
+  address_one_street     String
+  address_two_street     String
+  house_number           String
+  // "departamento" : 11,
+  department             String
+  // "departamentoDescripcion" : "ALTO PARANA",
+  department_description String
+  // "distrito" : 145,
+  district               String
+  // "distritoDescripcion" : "CIUDAD DEL ESTE",
+  district_description   String
+  // "ciudad" : 3432,
+  city                   String
+  // "ciudadDescripcion" : "PUERTO PTE.STROESSNER (MUNIC)",
+  city_description       String
+  // "telefono" : "0973-527155",
+  phone                  String
+  // "email" : "tips@tips.com.py, tips@gmail.com",
+  email                  String
+  // "denominacion" : "Sucursal 1",
+  denomination           String
+  is_delete              Boolean   @default(false)
+  created_at             DateTime  @default(now())
+  update_at              DateTime  @updatedAt
+  // relationship
+  ruc                    RucConfig @relation(fields: [ruc_id], references: [id_ruc])
+  ruc_id                 String
 }
 
 model Appointments {
@@ -149,6 +232,8 @@ model Company {
   account_plan           AccountPlan     @relation(fields: [account_plan_id], references: [id_account_plan])
   account_plan_id        String
   tickets                Ticket[]
+  ruc_config             RucConfig       @relation(fields: [ruc_id], references: [id_ruc])
+  ruc_id                 String
 }
 
 model AccountPlan {

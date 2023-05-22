@@ -7,6 +7,9 @@
   "engines": {
     "node": "18.16.0"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "build": "yarn clean && tsc",
     "clean": "rimraf ./build",

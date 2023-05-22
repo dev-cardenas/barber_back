@@ -1,0 +1,465 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id_user               String           @id @default(uuid())
+  name                  String
+  last_name             String
+  address               String
+  hours_available       String
+  email                 String           @unique
+  phone                 String
+  image                 String
+  whatsapp              String
+  is_blocked            Boolean          @default(false)
+  password_hash         String
+  is_delete             Boolean          @default(false)
+  created_at            DateTime         @default(now())
+  update_at             DateTime         @updatedAt
+  // relationship
+  roles                 UserRole[]
+  permissions           UserPermission[]
+  userCompany           Company          @relation(fields: [company_id], references: [id_company])
+  company_id            String
+  notifications         Notification[]
+  type_user             TypeUser         @relation(fields: [type_user_id], references: [id_type_user])
+  type_user_id          String
+  appointments_client   Appointments[]   @relation("appointments_client")
+  appointments_provider Appointments[]   @relation("appointments_provider")
+  ticket_client         Ticket[]         @relation("ticket_client")
+  ticket_provider       Ticket[]         @relation("ticket_provider")
+}
+
+model Appointments {
+  id_appointments              String                  @id @default(uuid())
+  date                         DateTime
+  canceled_at                  DateTime
+  process                      String
+  is_delete                    Boolean                 @default(false)
+  created_at                   DateTime                @default(now())
+  update_at                    DateTime                @updatedAt
+  // relationship
+  type_process_appointments    TypeProcessAppointments @relation(fields: [type_process_appointments_id], references: [id_type_process_appointments])
+  type_process_appointments_id String
+  client                       User?                   @relation("appointments_client", fields: [client_id], references: [id_user])
+  client_id                    String?
+  provider                     User?                   @relation("appointments_provider", fields: [provider_id], references: [id_user])
+  provider_id                  String?
+}
+
+model TypeProcessAppointments {
+  id_type_process_appointments String         @id @default(uuid())
+  type                         String
+  is_delete                    Boolean        @default(false)
+  created_at                   DateTime       @default(now())
+  update_at                    DateTime       @updatedAt
+  // relationship
+  appoiments                   Appointments[]
+}
+
+model TypeUser {
+  id_type_user String   @id @default(uuid())
+  type         String
+  description  String
+  is_delete    Boolean  @default(false)
+  created_at   DateTime @default(now())
+  update_at    DateTime @updatedAt
+  // relationship
+  users        User[]
+}
+
+model Notification {
+  id_notification   String   @id @default(uuid())
+  title             String
+  content           String
+  slug              String
+  read              Boolean  @default(false)
+  is_delete         Boolean  @default(false)
+  created_at        DateTime @default(now())
+  update_at         DateTime @updatedAt
+  // relationship
+  norification_user User     @relation(fields: [user_id], references: [id_user])
+  user_id           String
+}
+
+model UserRole {
+  id_user_role String           @id @default(uuid())
+  user_role    String           @unique
+  description  String
+  is_delete    Boolean          @default(false)
+  created_at   DateTime         @default(now())
+  update_at    DateTime         @updatedAt
+  // relationship
+  permissions  UserPermission[]
+  User         User?            @relation(fields: [userId_user], references: [id_user])
+  userId_user  String?
+}
+
+model UserPermission {
+  id_user_permission String     @id @default(uuid())
+  user_permission    String
+  description        String
+  is_delete          Boolean    @default(false)
+  created_at         DateTime   @default(now())
+  update_at          DateTime   @updatedAt
+  // relationship
+  roles              UserRole[]
+  user               User?      @relation(fields: [user_id], references: [id_user])
+  user_id            String?
+}
+
+model Company {
+  id_company             String          @id @default(uuid())
+  address                String
+  company_name           String
+  slug                   String
+  city                   String
+  lat                    String
+  lng                    String
+  ruc                    String
+  ci                     String
+  email                  String
+  hours_available        Int
+  link_instagram         String
+  link_twitter           String
+  link_facebook          String
+  payment_date           DateTime
+  notice_of_payment      DateTime
+  phone                  String
+  whatsapp               String
+  account_recovery_email String
+  payment_status         Boolean
+  is_delete              Boolean
+  created_at             DateTime        @default(now())
+  update_at              DateTime        @updatedAt
+  // relationship
+  product                Product[]
+  type_busisness         TypeBusisness[]
+  users                  User[]
+  products_base          ProductBase[]
+  account_plan           AccountPlan     @relation(fields: [account_plan_id], references: [id_account_plan])
+  account_plan_id        String
+  tickets                Ticket[]
+}
+
+model AccountPlan {
+  id_account_plan String    @id @default(uuid())
+  code            String
+  name            String
+  slug            String
+  description     String
+  price           Int
+  available_days  Int
+  is_delete       Boolean
+  created_at      DateTime  @default(now())
+  update_at       DateTime  @updatedAt
+  Company         Company[]
+}
+
+model TypeBusisness {
+  id_type_busisness String    @id @default(uuid())
+  type              String    @unique
+  is_delete         Boolean   @default(false)
+  created_at        DateTime  @default(now())
+  update_at         DateTime  @updatedAt
+  // relationship
+  companies         Company[]
+}
+
+model TypeProduct {
+  id_type_product String   @id @default(uuid())
+  type            String   @unique
+  is_delete       Boolean  @default(false)
+  created_at      DateTime @default(now())
+  update_at       DateTime @updatedAt
+}
+
+model CoinType {
+  id_coin_type String   @id @default(uuid())
+  name         String   @unique
+  symbol       String   @unique
+  is_delete    Boolean  @default(false)
+  created_at   DateTime @default(now())
+  update_at    DateTime @updatedAt
+}
+
+model Product {
+  id_product        String                @id @default(uuid())
+  barcode           String                @unique
+  color             String
+  name              String
+  hours_and_minutes String
+  // medida
+  measure           String
+  size              String
+  weight            Int
+  // example g, kg
+  type_weight       String
+  // litro
+  liter             Int
+  price_cost        Int
+  price_sale        Int
+  price_promotion   Int
+  // Precio mayorista
+  price_wholesaler  Int
+  product_code      String                @unique
+  product_sku       String
+  images            String
+  erase_code        String
+  description       String
+  slug              String
+  tags              String
+  assessment        String
+  features          String
+  lote              String
+  is_delete         Boolean               @default(false)
+  created_at        DateTime              @default(now())
+  update_at         DateTime              @updatedAt
+  // relationship\
+  sale              Sale[]
+  brand             Brand                 @relation(fields: [brand_id], references: [id_brand])
+  brand_id          String
+  company           Company               @relation(fields: [company_id], references: [id_company])
+  company_id        String
+  categories        Category[]
+  sub_categories    SubCategory[]
+  base_product      ProductBase           @relation(fields: [base_product_id], references: [id_product_base])
+  base_product_id   String
+  history           ProductPriceHistory[]
+  stock             Stock                 @relation(fields: [stock_id], references: [id_stock])
+  stock_id          String
+  tax               Tax                   @relation(fields: [tax_id], references: [id_tax])
+  tax_id            String
+  providers         Provider[]
+}
+
+model ProductBase {
+  id_product_base   String                @id @default(uuid())
+  barcode           String                @unique
+  color             String
+  name              String
+  hours_and_minutes String
+  // medida
+  measure           String
+  size              String
+  weight            Int
+  // example g, kg
+  type_weight       String
+  // litro
+  liter             Int
+  price_cost        Int
+  price_sale        Int
+  price_promotion   Int
+  // Precio mayorista
+  price_wholesaler  Int
+  product_code      String                @unique
+  product_sku       String
+  images            String
+  erase_code        String
+  description       String
+  slug              String
+  tags              String
+  assessment        String
+  features          String
+  lote              String
+  is_delete         Boolean               @default(false)
+  created_at        DateTime              @default(now())
+  update_at         DateTime              @updatedAt
+  // relationship
+  brand             Brand                 @relation(fields: [brand_id], references: [id_brand])
+  brand_id          String
+  company           Company               @relation(fields: [company_id], references: [id_company])
+  company_id        String
+  categories        Category[]
+  sub_categories    SubCategory[]
+  history           ProductPriceHistory[]
+  tax               Tax                   @relation(fields: [tax_id], references: [id_tax])
+  tax_id            String
+  Product           Product[]
+  providers         Provider[]
+}
+
+model Brand {
+  id_brand      String        @id @default(uuid())
+  name          String        @unique
+  logo          String
+  is_delete     Boolean       @default(false)
+  created_at    DateTime      @default(now())
+  update_at     DateTime      @updatedAt
+  // relationship
+  products      Product[]
+  products_base ProductBase[]
+}
+
+model Tax {
+  id_tax        String        @id @default(uuid())
+  percentage    String        @unique
+  type          String
+  slug          String
+  is_delete     Boolean       @default(false)
+  created_at    DateTime      @default(now())
+  update_at     DateTime      @updatedAt
+  // relationship
+  products      Product[]
+  products_base ProductBase[]
+}
+
+model Stock {
+  id_stock    String    @id @default(uuid())
+  name        String
+  description String
+  min_stock   Int
+  max_stock   Int
+  quantity    Int
+  status      Boolean
+  slug        String
+  is_delete   Boolean   @default(false)
+  created_at  DateTime  @default(now())
+  update_at   DateTime  @updatedAt
+  // relationship
+  products    Product[]
+  deposit     Deposit   @relation(fields: [deposit_id], references: [id_deposit])
+  deposit_id  String    @unique
+}
+
+model Deposit {
+  id_deposit String   @id @default(uuid())
+  name       String
+  location   String
+  lat        String
+  lng        String
+  slug       String
+  is_delete  Boolean  @default(false)
+  created_at DateTime @default(now())
+  update_at  DateTime @updatedAt
+  // relationship
+  stock      Stock?
+}
+
+model ProductPriceHistory {
+  id_product_history String      @id @default(uuid())
+  date               DateTime
+  name               String
+  price_cost         Int
+  price_sale         Int
+  price_promotion    Int
+  slug               String
+  is_delete          Boolean     @default(false)
+  created_at         DateTime    @default(now())
+  update_at          DateTime    @updatedAt
+  // relationship
+  product            Product     @relation(fields: [product_id], references: [id_product])
+  product_id         String
+  product_base       ProductBase @relation(fields: [product_base_id], references: [id_product_base])
+  product_base_id    String
+}
+
+model Category {
+  id_category    String        @id @default(uuid())
+  name           String
+  slug           String
+  is_delete      Boolean       @default(false)
+  created_at     DateTime      @default(now())
+  update_at      DateTime      @updatedAt
+  // relationship
+  products       Product[]
+  products_base  ProductBase[]
+  sub_categories SubCategory[]
+}
+
+model SubCategory {
+  id_sub_category String        @id @default(uuid())
+  name            String
+  slug            String
+  is_delete       Boolean       @default(false)
+  created_at      DateTime      @default(now())
+  update_at       DateTime      @updatedAt
+  // relationship
+  products        Product[]
+  products_base   ProductBase[]
+  categories      Category[]
+}
+
+model Invoice {
+  id_invoice            String   @id @default(uuid())
+  details               String
+  // Timbrado
+  // debe ser obligatoriamente 8 numeros
+  stamped               String
+  invoice_number        String
+  slug                  String
+  status                String
+  // inicio de vigencia
+  beginning_of_validity DateTime
+  // Valido hasta
+  validity_date         DateTime
+  // fecha de emisión
+  date_of_issue         DateTime
+  sub_total             Int
+  total                 Int
+  sale_condition        String
+  tax_type              Int
+  is_delete             Boolean  @default(false)
+  created_at            DateTime @default(now())
+  update_at             DateTime @updatedAt
+}
+
+model Provider {
+  id_provider   String        @id @default(uuid())
+  name          String
+  business_name String
+  address       String
+  email         String
+  slug          String
+  ruc           String
+  ci            String
+  phone         String
+  whatsapp      String
+  is_delete     Boolean       @default(false)
+  created_at    DateTime      @default(now())
+  update_at     DateTime      @updatedAt
+  // relationship
+  products      Product[]
+  products_base ProductBase[]
+}
+
+model Sale {
+  id_sale     String    @id @default(uuid())
+  name        String
+  slug        String
+  price       Int
+  quantity    Int
+  is_canceled Boolean   @default(false)
+  is_delete   Boolean   @default(false)
+  created_at  DateTime  @default(now())
+  update_at   DateTime  @updatedAt
+  // relationship
+  product     Product[]
+  ticket      Ticket    @relation(fields: [ticket_id], references: [id_ticket])
+  ticket_id   String
+}
+
+model Ticket {
+  id_ticket   String   @id @default(uuid())
+  is_canceled Boolean  @default(false)
+  is_delete   Boolean  @default(false)
+  created_at  DateTime @default(now())
+  update_at   DateTime @updatedAt
+  // relationship
+  client      User?    @relation("ticket_client", fields: [client_id], references: [id_user])
+  client_id   String?
+  provider    User?    @relation("ticket_provider", fields: [provider_id], references: [id_user])
+  provider_id String?
+  company     Company  @relation(fields: [company_id], references: [id_company])
+  company_id  String
+  sale        Sale[]
+}

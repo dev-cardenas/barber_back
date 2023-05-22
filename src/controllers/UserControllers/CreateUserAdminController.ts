@@ -3,10 +3,10 @@ import { CreateUserAdminService } from 'services/UserServices/index';
 
 export class CreateUserAdminController {
   async handle(request: Request, response: Response) {
-    const { email, password, password_confirm } = request.body;
+    const { email, password, password_confirm, name, last_name } = request.body;
 
     const createUserAdminService = new CreateUserAdminService();
-    const result = await createUserAdminService.execute({ email, password, password_confirm });
+    const result = await createUserAdminService.execute({ email, password, password_confirm, name, last_name });
 
     if (result instanceof Error) {
       return response.status(400).json({

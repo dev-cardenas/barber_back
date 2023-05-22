@@ -3,10 +3,10 @@ import { CreateUserEmployeeService } from 'services/UserServices/index';
 
 export class CreateUserEmployeeController {
   async handle(request: Request, response: Response) {
-    const { email, password, password_confirm } = request.body;
+    const { name, last_name, email, password, password_confirm } = request.body;
 
     const createUserEmployeeService = new CreateUserEmployeeService();
-    const result = await createUserEmployeeService.execute({ email, password, password_confirm });
+    const result = await createUserEmployeeService.execute({ name, last_name, email, password, password_confirm });
 
     if (result instanceof Error) {
       return response.status(400).json({

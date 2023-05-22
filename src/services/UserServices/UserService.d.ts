@@ -5,6 +5,8 @@ type UserRequest = {
   password: string;
   password_confirm: string;
   type_user?: TypeUser;
+  name: string;
+  last_name: string;
 };
 
 export type GetUserRequest = {

@@ -1,44 +1,51 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToOne,
+} from 'typeorm'
+import { v4 as uuid } from 'uuid'
 
-import Stock from './Stock';
+import Stock from './Stock'
 
 @Entity('deposit')
 class Deposit {
   @PrimaryColumn()
-  readonly id_deposit?: string;
+  readonly id_deposit?: string
 
   @Column({ type: 'text', default: null })
-  name: string;
+  name: string
 
   @Column({ type: 'text', default: null })
-  location: string;
+  location: string
 
   @Column({ type: 'text', default: null })
-  slug: string;
+  slug: string
 
   @Column({
     default: false,
   })
-  is_delete?: boolean;
+  is_delete?: boolean
 
   // relationships
   @OneToOne(() => Stock, (stock) => stock.id_deposit, {
     nullable: true,
   })
-  id_stock: Stock;
+  id_stock: Stock
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at?: Date;
+  created_at?: Date
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  update_at?: Date;
+  update_at?: Date
 
   constructor() {
     if (!this.id_deposit) {
-      this.id_deposit = uuid();
+      this.id_deposit = uuid()
     }
   }
 }
 
-export default Deposit;
+export default Deposit

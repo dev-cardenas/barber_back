@@ -1,33 +1,39 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm'
+import { v4 as uuid } from 'uuid'
 
 @Entity('sub_categories')
 class SubCategory {
   @PrimaryColumn()
-  readonly id_sub_category?: string;
+  readonly id_sub_category?: string
 
   @Column({ type: 'text', default: null })
-  name: string;
+  name: string
 
   @Column({ type: 'text', default: null })
-  slug: string;
+  slug: string
 
   @Column({
     default: false,
   })
-  is_delete?: boolean;
+  is_delete?: boolean
 
   @CreateDateColumn({ type: 'timestamp' })
-  created_at?: Date;
+  created_at?: Date
 
   @UpdateDateColumn({ type: 'timestamp' })
-  update_at?: Date;
+  update_at?: Date
 
   constructor() {
     if (!this.id_sub_category) {
-      this.id_sub_category = uuid();
+      this.id_sub_category = uuid()
     }
   }
 }
 
-export default SubCategory;
+export default SubCategory

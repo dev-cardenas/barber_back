@@ -9,107 +9,108 @@ import {
   ManyToMany,
   JoinColumn,
   JoinTable,
-} from 'typeorm';
-import { v4 as uuid } from 'uuid';
+} from 'typeorm'
+import { v4 as uuid } from 'uuid'
 
-import Brand from './Brand';
-import Category from './Category';
-import ProductCostHistory from './ProductCostHistory';
-import Stock from './Stock';
-import SubCategory from './SubCategory';
-import Tax from './Tax';
-import BaseProductServices from './BaseProductServices';
+import Brand from './Brand'
+import Category from './Category'
+import ProductCostHistory from './ProductCostHistory'
+import Stock from './Stock'
+import SubCategory from './SubCategory'
+import Tax from './Tax'
+import BaseProductServices from './BaseProductServices'
 
 @Entity('product_service')
 class Product {
   @PrimaryColumn()
-  readonly id_product_services?: string;
+  readonly id_product_services?: string
 
   @Column({ type: 'text', default: null })
-  color?: string;
+  color?: string
 
   @Column({ type: 'text', default: null })
-  name: string;
+  name: string
 
   @Column({ type: 'text', default: null })
-  hours_and_minutes: string;
+  hours_and_minutes: string
 
   @Column({ type: 'text', default: null })
-  measure?: string;
+  measure?: string
 
   @Column({ type: 'text', default: null })
-  size?: string;
+  size?: string
+
   /**
    * Precio con el que compre
    */
   @Column({ type: 'int', default: null })
-  price_cost: number;
+  price_cost: number
 
   /**
    * Precio de venta
    */
   @Column({ type: 'int', default: null })
-  price_sale: number;
+  price_sale: number
 
   @Column({ type: 'int', default: null })
-  price_promotion: number;
+  price_promotion: number
 
   @Column({ type: 'int', default: null })
-  weight: number;
+  weight: number
 
   // example g, kg
   @Column({ type: 'text', default: null })
-  type_weight?: string;
+  type_weight?: string
 
   @Column({ type: 'int', default: null })
-  liter: number;
+  liter: number
 
   /**
    * Precio mayorista
    */
   @Column({ type: 'int', default: null })
-  price_wholesaler: number;
+  price_wholesaler: number
 
   @Column({ type: 'text', default: null })
-  product_code: string;
+  product_code: string
 
   @Column({ type: 'text', default: null })
-  product_sku: string;
+  product_sku: string
 
   @Column({ type: 'text', default: null })
-  images: string;
+  images: string
 
   @Column({ type: 'text', default: null })
-  erase_code: string;
+  erase_code: string
 
   @Column({ type: 'text', default: null })
-  description: string;
+  description: string
 
   @Column({ type: 'text', default: null })
-  slug: string;
+  slug: string
 
   @Column({ type: 'text', default: null })
-  tags: string;
+  tags: string
 
   @Column({ type: 'text', default: null })
-  assessment: string;
+  assessment: string
 
   @Column({ type: 'text', default: null })
-  features: string;
+  features: string
 
   @Column({ type: 'text', default: null })
-  lote: string;
+  lote: string
 
   @Column({
     default: false,
   })
-  is_delete?: boolean;
+  is_delete?: boolean
 
   // relationships
   @ManyToOne(() => Brand, (brand) => brand.product_service, {
     nullable: true,
   })
-  brand: Brand;
+  brand: Brand
 
   @ManyToMany(() => Category, (category) => category.id_category, {
     nullable: true,
@@ -119,49 +120,60 @@ class Product {
     joinColumns: [{ name: 'id_product_service' }],
     inverseJoinColumns: [{ name: 'id_category' }],
   })
-  categories: Category[];
+  categories: Category[]
 
-  @ManyToMany(() => SubCategory, (sub_category) => sub_category.id_sub_category, {
-    nullable: true,
-  })
+  @ManyToMany(
+    () => SubCategory,
+    (sub_category) => sub_category.id_sub_category,
+    {
+      nullable: true,
+    },
+  )
   @JoinTable({
     name: 'id_sub_category_in_product',
     joinColumns: [{ name: 'id_product' }],
     inverseJoinColumns: [{ name: 'id_sub_category' }],
   })
-  sub_categories: SubCategory[];
+  sub_categories: SubCategory[]
 
-  @ManyToOne(() => BaseProductServices, (baseProduct) => baseProduct.product_services, {
-    nullable: true,
-  })
-  base_product_services: BaseProductServices;
+  @ManyToOne(
+    () => BaseProductServices,
+    (baseProduct) => baseProduct.product_services,
+    {
+      nullable: true,
+    },
+  )
+  base_product_services: BaseProductServices
 
-  @OneToMany(() => ProductCostHistory, (product_cost_history) => product_cost_history.product_services)
+  @OneToMany(
+    () => ProductCostHistory,
+    (product_cost_history) => product_cost_history.product_services,
+  )
   @JoinColumn({ name: 'id_history' })
-  history: ProductCostHistory[];
+  history: ProductCostHistory[]
 
   @OneToMany(() => Stock, (stock) => stock.product_service, {
     nullable: true,
   })
   @JoinColumn({ name: 'id_stock' })
-  stock: Stock[];
+  stock: Stock[]
 
   @ManyToOne(() => Tax, (tax) => tax.product_services, {
     nullable: true,
   })
-  tax: Tax;
+  tax: Tax
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at?: Date;
+  created_at?: Date
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  update_at?: Date;
+  update_at?: Date
 
   constructor() {
     if (!this.id_product_services) {
-      this.id_product_services = uuid();
+      this.id_product_services = uuid()
     }
   }
 }
 
-export default Product;
+export default Product

@@ -6,5 +6,7 @@ export const providers = [
     password: 'Provider#1234',
     password_confirm: 'Provider#1234',
     type_user: 'provider' as TypeUser,
+    name: 'provider',
+    last_name: 'provider',
   },
 ];

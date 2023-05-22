@@ -7,63 +7,67 @@ import {
   ManyToOne,
   OneToOne,
   JoinColumn,
-} from 'typeorm';
-import { v4 as uuid } from 'uuid';
+} from 'typeorm'
+import { v4 as uuid } from 'uuid'
 
-import ProductServices from './ProductServices';
-import Deposit from './Deposit';
+import ProductServices from './ProductServices'
+import Deposit from './Deposit'
 
 @Entity('stock')
 class Stock {
   @PrimaryColumn()
-  readonly id_stock?: string;
+  readonly id_stock?: string
 
   @Column({ type: 'text', default: null })
-  name: string;
+  name: string
 
   @Column({ type: 'text', default: null })
-  description: string;
+  description: string
 
   @Column({ type: 'int', default: null })
-  min_stock: number;
+  min_stock: number
 
   @Column({ type: 'int', default: null })
-  max_stock: number;
+  max_stock: number
 
   @Column({ type: 'int', default: null })
-  quantity: number;
+  quantity: number
 
   @Column({ type: 'boolean', default: null })
-  status: boolean;
+  status: boolean
 
   @Column({ type: 'text', default: null })
-  slug: string;
+  slug: string
 
-  @ManyToOne(() => ProductServices, (product_service) => product_service.stock, {
-    nullable: true,
-  })
-  product_service: ProductServices;
+  @ManyToOne(
+    () => ProductServices,
+    (product_service) => product_service.stock,
+    {
+      nullable: true,
+    },
+  )
+  product_service: ProductServices
 
   @OneToOne(() => Deposit, (deposit) => deposit.id_stock)
   @JoinColumn()
-  id_deposit: Deposit;
+  id_deposit: Deposit
 
   @Column({
     default: false,
   })
-  is_delete?: boolean;
+  is_delete?: boolean
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at?: Date;
+  created_at?: Date
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  update_at?: Date;
+  update_at?: Date
 
   constructor() {
     if (!this.id_stock) {
-      this.id_stock = uuid();
+      this.id_stock = uuid()
     }
   }
 }
 
-export default Stock;
+export default Stock

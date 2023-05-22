@@ -12,6 +12,7 @@ export class SessionService {
     const repo = UserRepository();
 
     const user = await repo.findOne({ where: { email } });
+    console.log(user);
 
     if (!user) {
       return new Error('Email or password are wrong!');
@@ -25,6 +26,13 @@ export class SessionService {
 
     const access_token = sign({ sub: user.id_user }, process.env.SECRET_JWT);
 
-    return { access_token };
+    return {
+      accessToken: access_token,
+      user: {
+        name: user.name,
+        lastName: user.last_name,
+        image: user.image,
+      },
+    };
   }
 }

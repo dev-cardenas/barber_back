@@ -5,10 +5,19 @@ import { userSchema } from 'helpers/userSchema';
 import { UserRequest } from './UserService';
 
 export class CreateUserService {
-  async execute({ password, email, password_confirm, type_user = 'customer' }: UserRequest): Promise<Error | User> {
+  async execute({
+    name,
+    last_name,
+    password,
+    email,
+    password_confirm,
+    type_user = 'customer',
+  }: UserRequest): Promise<Error | User> {
     try {
       await userSchema.validate({
         email,
+        name,
+        last_name,
         password,
         password_confirm,
       });
@@ -18,19 +27,19 @@ export class CreateUserService {
 
     const existUser = await UserRepository().findOne({ where: { email } });
 
-    if (existUser) {
+    if (!!existUser) {
       return new Error('Can you check your mail?');
     }
 
     const existRole = await UserRolesRepository().findOne({ where: { user_role: type_user } });
 
-    if (existRole) {
+    if (!existRole) {
       return new Error('An error ocurred.');
     }
 
     const password_hash = await hash(password, 8);
 
-    const user = UserRepository().create({ email, password_hash, user_roles: [existRole] });
+    const user = UserRepository().create({ name, last_name, email, password_hash, user_roles: [existRole] });
 
     await UserRepository().save(user);
 

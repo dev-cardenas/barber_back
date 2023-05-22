@@ -1,7 +1,7 @@
 import { CreateRoleService, GetWithUserRoleService } from 'services/RolesServices/index';
 // import { CreatePermissionService } from 'services/PermissionsServices/index';
 import { CreateUserAdminService, CreateUserService } from 'services/UserServices/index';
-import { admins, customers, providers, permissions, roles } from 'constants/index';
+import { admins, customers, providers, roles } from 'constants/index';
 import { administrator } from 'constants/roles';
 export async function loadDataInitDB() {
   const createRoleService = new CreateRoleService();
@@ -9,7 +9,7 @@ export async function loadDataInitDB() {
 
   const roleAdmin = await getRolesServices.execute({ user_role: administrator.user_role });
 
-  if (roleAdmin instanceof Error || roleAdmin) {
+  if (!(roleAdmin instanceof Error)) {
     console.log('Data is ok');
     return;
   }

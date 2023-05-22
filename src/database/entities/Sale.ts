@@ -1,48 +1,54 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm'
+import { v4 as uuid } from 'uuid'
 
 @Entity('sale')
 class Sale {
   @PrimaryColumn()
-  readonly id_sale?: string;
+  readonly id_sale?: string
 
   @Column({ type: 'text', default: null })
-  name: string;
+  name: string
 
   @Column({ type: 'text', default: null })
-  description: string;
+  description: string
 
   @Column({ type: 'text', default: null })
-  slug: string;
+  slug: string
 
   @Column({ type: 'text', default: null })
-  ruc: string;
+  ruc: string
 
   @Column({ type: 'text', default: null })
-  status: string;
+  status: string
 
   @Column({ type: 'text', default: null })
-  value: string;
+  value: string
 
   @Column({ type: 'text', default: null })
-  type: string;
+  type: string
 
   @Column({
     default: false,
   })
-  is_delete?: boolean;
+  is_delete?: boolean
 
   @CreateDateColumn({ type: 'timestamp' })
-  created_at?: Date;
+  created_at?: Date
 
   @UpdateDateColumn({ type: 'timestamp' })
-  update_at?: Date;
+  update_at?: Date
 
   constructor() {
     if (!this.id_sale) {
-      this.id_sale = uuid();
+      this.id_sale = uuid()
     }
   }
 }
 
-export default Sale;
+export default Sale

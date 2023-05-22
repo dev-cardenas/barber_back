@@ -2,14 +2,17 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import Youch from 'youch';
 
+import { setupLogging } from './config';
 import router from './routes';
 
 export const app = express();
+
+setupLogging(app);
 app.use(cors());
 
 app.use(express.json());
 
-app.use(router);
+app.use('/api/v1', router);
 
 app.use(async (err: Error, request: Request, response: Response, next: NextFunction) => {
   if (process.env.NODE_ENV === 'development') {

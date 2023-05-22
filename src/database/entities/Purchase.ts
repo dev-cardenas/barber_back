@@ -6,51 +6,51 @@ import {
   UpdateDateColumn,
   // OneToMany,
   // JoinColumn,
-} from 'typeorm';
-import { v4 as uuid } from 'uuid';
+} from 'typeorm'
+import { v4 as uuid } from 'uuid'
 
 @Entity('purchase')
 class Purchase {
   @PrimaryColumn()
-  readonly id_purchase?: string;
+  readonly id_purchase?: string
 
   @Column({ type: 'text', default: null })
-  name: string;
+  name: string
 
   @Column({ type: 'text', default: null })
-  description: string;
+  description: string
 
   @Column({ type: 'text', default: null })
-  ruc: string;
+  ruc: string
 
   @Column({ type: 'text', default: null })
-  status: string;
+  status: string
 
   @Column({ type: 'text', default: null })
-  slug: string;
+  slug: string
 
   @Column({ type: 'text', default: null })
-  value: string;
+  value: string
 
   @Column({ type: 'text', default: null })
-  type: string;
+  type: string
 
   @Column({
     default: false,
   })
-  is_delete?: boolean;
+  is_delete?: boolean
 
   @CreateDateColumn({ type: 'timestamp' })
-  created_at?: Date;
+  created_at?: Date
 
   @UpdateDateColumn({ type: 'timestamp' })
-  update_at?: Date;
+  update_at?: Date
 
   constructor() {
     if (!this.id_purchase) {
-      this.id_purchase = uuid();
+      this.id_purchase = uuid()
     }
   }
 }
 
-export default Purchase;
+export default Purchase

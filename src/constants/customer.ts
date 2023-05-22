@@ -6,5 +6,7 @@ export const customers = [
     password: 'Customer#1234',
     password_confirm: 'Customer#1234',
     type_user: 'customer' as TypeUser,
+    name: 'customer',
+    last_name: 'customer',
   },
 ];

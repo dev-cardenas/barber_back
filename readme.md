@@ -24,3 +24,10 @@ yarn typeorm migration:generate ./src/database/migrations/create-db -d ./src/con
 yarn typeorm migration:run -d ./src/config/data-source.ts
 yarn typeorm migration:revert -d ./src/config/data-source.ts
 ```
+
+
+### Prisma
+```
+npx prisma migration dev
+npx prisma studio
+```

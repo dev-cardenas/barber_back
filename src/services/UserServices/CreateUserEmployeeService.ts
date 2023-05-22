@@ -6,12 +6,14 @@ import { employee } from 'constants/roles';
 import { UserRequest } from './UserService';
 
 export class CreateUserEmployeeService {
-  async execute({ password, email, password_confirm }: UserRequest): Promise<Error | User> {
+  async execute({ name, last_name, password, email, password_confirm }: UserRequest): Promise<Error | User> {
     try {
       await userSchema.validate({
         email,
         password,
         password_confirm,
+        name,
+        last_name,
       });
     } catch (err) {
       return new Error(err.errors.join(' '));
@@ -19,19 +21,19 @@ export class CreateUserEmployeeService {
 
     const existUser = await UserRepository().findOne({ where: { email } });
 
-    if (existUser) {
+    if (!!existUser) {
       return new Error('Can you check your mail?');
     }
 
     const existRole = await UserRolesRepository().findOne({ where: { user_role: employee.user_role } });
 
-    if (existRole) {
+    if (!existRole) {
       return new Error('An error ocurred. Can you speak to the support team?');
     }
 
     const password_hash = await hash(password, 8);
 
-    const user = UserRepository().create({ email, password_hash, user_roles: [existRole] });
+    const user = UserRepository().create({ name, last_name, email, password_hash, user_roles: [existRole] });
 
     await UserRepository().save(user);
 

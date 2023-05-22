@@ -1,35 +1,43 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm'
+import { v4 as uuid } from 'uuid'
 
-import Company from './Company';
+import Company from './Company'
 
 @Entity('account_plans')
 class AccountPlans {
   @PrimaryColumn()
-  readonly id_account_plans?: string;
+  readonly id_account_plans?: string
 
   @Column({ type: 'text', default: null })
-  code: string;
+  code: string
 
   @Column({ type: 'text', default: null })
-  name: string;
+  name: string
 
   @Column({ type: 'text', default: null })
-  slug: string;
+  slug: string
 
   @Column({ type: 'text', default: null })
-  description: string;
+  description: string
 
   @Column({ type: 'int', default: null })
-  price: number;
+  price: number
 
   @Column({ type: 'int', default: null })
-  available_days: number;
+  available_days: number
 
   @Column({
     default: false,
   })
-  is_delete?: boolean;
+  is_delete?: boolean
 
   @OneToMany(() => Company, (company) => company.account_plan, {
     nullable: true,
@@ -37,19 +45,19 @@ class AccountPlans {
   @JoinColumn({
     name: 'id_account_plans_in_company',
   })
-  company: Company[];
+  company: Company[]
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at?: Date;
+  created_at?: Date
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  update_at?: Date;
+  update_at?: Date
 
   constructor() {
     if (!this.id_account_plans) {
-      this.id_account_plans = uuid();
+      this.id_account_plans = uuid()
     }
   }
 }
 
-export default AccountPlans;
+export default AccountPlans

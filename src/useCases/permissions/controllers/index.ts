@@ -1,0 +1,5 @@
+export * from './CreatePermissionController'
+export * from './GetAllPermissionController'
+export * from './GetByIdPermissionController'
+export * from './UpdatePermissionController'
+export * from './DeleteByIdPermissionController'

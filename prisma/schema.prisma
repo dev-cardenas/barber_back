@@ -189,7 +189,7 @@ model UserRole {
 
 model UserPermission {
   id_user_permission String     @id @default(uuid())
-  user_permission    String
+  user_permission    String     @unique
   description        String?
   is_delete          Boolean    @default(false)
   created_at         DateTime   @default(now())

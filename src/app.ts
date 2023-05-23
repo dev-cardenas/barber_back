@@ -3,6 +3,7 @@ import cors from '@fastify/cors'
 import jwtFastify from '@fastify/jwt'
 
 import { authRoutes } from './useCases/auth/routes'
+import { rolesRoutes } from './useCases/roles/routes'
 
 const fastifyConfig = {
   trustProxy: true,
@@ -19,6 +20,7 @@ app.register(jwtFastify, {
 })
 
 app.register(authRoutes)
+app.register(rolesRoutes)
 
 app.register(cors, {
   origin: true, // All urls

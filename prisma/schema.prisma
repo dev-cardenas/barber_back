@@ -75,7 +75,8 @@ model RucConfig {
   // relationship
   economic_activities EconomicActivities[]
   establishments      Establishments[]
-  company             Company[]
+  company             Company              @relation(fields: [company_id], references: [id_company])
+  company_id          String               @unique
 }
 
 model EconomicActivities {
@@ -203,13 +204,15 @@ model UserPermission {
 model Company {
   id_company             String          @id @default(uuid())
   address                String?
-  company_name           String
+  company_name           String          @unique
+  description            String?
   slug                   String?
   city                   String
+  country                String
   lat                    String?
   lng                    String?
   ci                     String?
-  email                  String
+  email                  String          @unique
   hours_available        Int
   link_instagram         String?
   link_twitter           String?
@@ -220,7 +223,7 @@ model Company {
   whatsapp               String?
   account_recovery_email String?
   payment_status         Boolean         @default(false)
-  is_delete              Boolean
+  is_delete              Boolean         @default(false)
   created_at             DateTime        @default(now())
   update_at              DateTime        @updatedAt
   // relationship
@@ -231,8 +234,7 @@ model Company {
   account_plan           AccountPlan     @relation(fields: [account_plan_id], references: [id_account_plan])
   account_plan_id        String
   tickets                Ticket[]
-  ruc_config             RucConfig?      @relation(fields: [ruc_id], references: [id_ruc])
-  ruc_id                 String?
+  ruc                    RucConfig?
 }
 
 model AccountPlan {

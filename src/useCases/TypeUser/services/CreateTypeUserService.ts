@@ -2,11 +2,11 @@ import { prisma } from 'config/index'
 import { ITypeUser } from '../models'
 
 export interface ICreateTypeUserService {
-  role: ITypeUser
+  typeUser: ITypeUser
 }
 
-export interface IResponseCreateTypeUserService extends ITypeUser {
-  id_type_user?: string
+export interface IResponseCreateTypeUserService {
+  typeUser?: ITypeUser
   error?: string
 }
 
@@ -15,7 +15,7 @@ export const CreateTypeUserService = async ({
 }: ICreateTypeUserService): Promise<IResponseCreateTypeUserService> => {
   const typeUserSaved = await prisma.typeUser.findUnique({
     where: {
-      id_type_user: typeUser,
+      type: typeUser.type,
     },
   })
 
@@ -33,10 +33,10 @@ export const CreateTypeUserService = async ({
 
   const newTypeUser = await prisma.typeUser.create({
     data: {
-      id_type_user: typeUser,
+      id_type_user: typeUser.id_type_user,
       ...typeUser,
     },
   })
 
-  return newTypeUser
+  return { typeUser: newTypeUser }
 }

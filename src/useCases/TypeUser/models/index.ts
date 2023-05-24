@@ -1,1 +1,1 @@
-export * from './typeUser'
+export * from './typeUserProject'

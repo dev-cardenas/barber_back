@@ -8,11 +8,12 @@ interface IGetByIdTypeProcessAppointmentsService {
 export const GetByIdTypeProcessAppointmentsService = async ({
   id_type_process_appointments,
 }: IGetByIdTypeProcessAppointmentsService): Promise<ITypeProcessAppointments> => {
-  const typeProcessAppointments = await prisma.typeProcessAppointments.findUnique({
-    where: {
-      id_type_process_appointments,
-    },
-  })
+  const typeProcessAppointments =
+    await prisma.typeProcessAppointments.findUnique({
+      where: {
+        id_type_process_appointments,
+      },
+    })
 
   return typeProcessAppointments
 }

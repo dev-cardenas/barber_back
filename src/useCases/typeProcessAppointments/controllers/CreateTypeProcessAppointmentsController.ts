@@ -9,7 +9,9 @@ export const CreateTypeProcessAppointmentsController = async (req, reply) => {
     })
 
     const typeProcessAppointments = typeProcessAppointmentsSchema.parse(body)
-    const result = await CreateTypeProcessAppointmentsService({ typeProcessAppointments })
+    const result = await CreateTypeProcessAppointmentsService({
+      typeProcessAppointments,
+    })
 
     if (result?.error) {
       reply.code(400).send(result)

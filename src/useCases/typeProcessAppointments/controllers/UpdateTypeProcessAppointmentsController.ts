@@ -10,7 +10,9 @@ export const UpdateTypeProcessAppointmentsController = async (req, reply) => {
     })
 
     const typeProcessAppointments = typeProcessAppointmentsSchema.parse(body)
-    const result = await UpdateTypeProcessAppointmentsService({ typeProcessAppointments })
+    const result = await UpdateTypeProcessAppointmentsService({
+      typeProcessAppointments,
+    })
 
     return reply.code(200).send(result)
   } catch (err) {

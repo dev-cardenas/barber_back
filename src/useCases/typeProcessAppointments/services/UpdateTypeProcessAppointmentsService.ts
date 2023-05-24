@@ -8,13 +8,13 @@ export const UpdateTypeProcessAppointmentsService = async ({
   const { id_type_process_appointments } = typeProcessAppointments
   delete typeProcessAppointments.id_type_process_appointments
 
-  const typeProcessAppointmentsUpdated = await prisma.typeProcessAppointments.update({
-    where: {
-      id_type_process_appointments,
-    },
-    data: typeProcessAppointments,
-  })
+  const typeProcessAppointmentsUpdated =
+    await prisma.typeProcessAppointments.update({
+      where: {
+        id_type_process_appointments,
+      },
+      data: typeProcessAppointments,
+    })
 
   return typeProcessAppointmentsUpdated
 }
-

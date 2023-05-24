@@ -5,19 +5,21 @@ export interface ICreateTypeProcessAppointmentsService {
   typeProcessAppointments: ITypeProcessAppointments
 }
 
-export interface IResponseCreateTypeProcessAppointmentsService extends ITypeProcessAppointments {
+export interface IResponseCreateTypeProcessAppointmentsService
+  extends ITypeProcessAppointments {
   id_type_process_appointments?: string
   error?: string
 }
 
-export const CreateTypeProcessAppointments = async ({
+export const CreateTypeProcessAppointmentsService = async ({
   typeProcessAppointments,
 }: ICreateTypeProcessAppointmentsService): Promise<IResponseCreateTypeProcessAppointmentsService> => {
-  const typeProcessAppointmentsSaved = await prisma.userTypeProcessAppointments.findUnique({
-    where: {
-      type: typeProcessAppointments.type,
-    },
-  })
+  const typeProcessAppointmentsSaved =
+    await prisma.typeProcessAppointments.findUnique({
+      where: {
+        type: typeProcessAppointments.type,
+      },
+    })
 
   if (!typeProcessAppointmentsSaved) {
     return {
@@ -31,13 +33,14 @@ export const CreateTypeProcessAppointments = async ({
     }
   }
 
-  const newTypeProcessAppointments = await prisma.typeProcessAppointments.create({
-    data: {
-      type: typeProcessAppointments.type,
+  const newTypeProcessAppointments =
+    await prisma.typeProcessAppointments.create({
+      data: {
+        type: typeProcessAppointments.type,
 
-      ...typeProcessAppointments,
-    },
-  })
+        ...typeProcessAppointments,
+      },
+    })
 
   return newTypeProcessAppointments
 }

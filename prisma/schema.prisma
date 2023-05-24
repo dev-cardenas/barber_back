@@ -262,11 +262,12 @@ model TypeBusisness {
 }
 
 model TypeProduct {
-  id_type_product String   @id @default(uuid())
-  type            String   @unique
-  is_delete       Boolean  @default(false)
-  created_at      DateTime @default(now())
-  update_at       DateTime @updatedAt
+  id_type_product String    @id @default(uuid())
+  type            String    @unique
+  is_delete       Boolean   @default(false)
+  created_at      DateTime  @default(now())
+  update_at       DateTime  @updatedAt
+  Product         Product[]
 }
 
 model CoinType {
@@ -327,6 +328,7 @@ model Product {
   tax               Tax?                  @relation(fields: [tax_id], references: [id_tax])
   tax_id            String?
   providers         Provider[]
+  type_product      TypeProduct[]
 }
 
 model ProductBase {

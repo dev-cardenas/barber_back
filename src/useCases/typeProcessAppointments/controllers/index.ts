@@ -1,0 +1,5 @@
+export * from './CreateTypeProcessAppointmentsController'
+export * from './GetAllTypeProcessAppointmentsController'
+export * from './GetByIdTypeProcessAppointmentsController'
+export * from './UpdateTypeProcessAppointmentsController'
+export * from './DeleteByIdTypeProcessAppointmentsController'

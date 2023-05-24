@@ -1,0 +1,5 @@
+export * from './CreateTypeUserController'
+export * from './GetAllTypeUserController'
+export * from './GetByIdTypeUserController'
+export * from './UpdateTypeUserController'
+export * from './DeleteByIdTypeUserController'

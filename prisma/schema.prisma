@@ -260,8 +260,8 @@ model Company {
 
 model AccountPlan {
   id_account_plan String    @id @default(uuid())
-  code            String
-  name            String
+  code            String    @unique
+  name            String    @unique
   slug            String?
   description     String
   price           Int

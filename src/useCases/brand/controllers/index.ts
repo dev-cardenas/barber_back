@@ -1,0 +1,5 @@
+export * from './CreateBrandController'
+export * from './GetAllBrandController'
+export * from './GetByIdBrandController'
+export * from './UpdateBrandController'
+export * from './DeleteByIdBrandController'

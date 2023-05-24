@@ -14,13 +14,17 @@ model User {
   id_user               String           @id @default(uuid())
   name                  String?
   last_name             String?
-  address               String?
   hours_available       String?
   email                 String           @unique
   phone                 String?
   image                 String?
   token                 String?
+  gender                String?
   whatsapp              String?
+  city                  String?
+  country               String?
+  lat                   String?
+  lng                   String?
   is_blocked            Boolean          @default(false)
   password_hash         String
   is_delete             Boolean          @default(false)
@@ -45,7 +49,6 @@ model RucClient {
   id_ruc_client String   @id @default(uuid())
   name          String
   ruc           String
-  address       String?
   is_delete     Boolean  @default(false)
   created_at    DateTime @default(now())
   update_at     DateTime @updatedAt
@@ -201,6 +204,24 @@ model UserPermission {
   user_id            String?
 }
 
+// aqui falta agregar sus horarios
+model Schedule {
+  id_schedule String   @id @default(uuid())
+  monday      String?
+  tuesday     String?
+  wednesday   String?
+  thursday    String?
+  friday      String?
+  saturday    String?
+  sunday      String?
+  is_delete   Boolean  @default(false)
+  created_at  DateTime @default(now())
+  update_at   DateTime @updatedAt
+  // relationship
+  company     Company  @relation(fields: [company_id], references: [id_company])
+  company_id  String   @unique
+}
+
 model Company {
   id_company             String          @id @default(uuid())
   address                String?
@@ -211,7 +232,6 @@ model Company {
   country                String
   lat                    String?
   lng                    String?
-  ci                     String?
   email                  String          @unique
   hours_available        Int
   link_instagram         String?
@@ -235,6 +255,7 @@ model Company {
   account_plan_id        String
   tickets                Ticket[]
   ruc                    RucConfig?
+  schedule               Schedule?
 }
 
 model AccountPlan {

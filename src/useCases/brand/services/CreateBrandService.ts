@@ -13,19 +13,13 @@ export interface IResponseCreateBrandService extends IBrand {
 export const CreateBrandService = async ({
   brand,
 }: ICreateBrandService): Promise<IResponseCreateBrandService> => {
-  const roleSaved = await prisma.userRole.findUnique({
+  const brandSaved = await prisma.brand.findUnique({
     where: {
       name: brand.name,
     },
   })
 
   if (!brandSaved) {
-    return {
-      error: 'Brand name invalid',
-    }
-  }
-
-  if (!brand.name) {
     return {
       error: 'Brand name invalid',
     }

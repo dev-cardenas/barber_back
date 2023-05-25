@@ -1,21 +1,21 @@
 import { prisma } from 'config/index'
-import { IRole } from '../models'
+import { IBrand } from '../models'
 
 interface IDeleteByIdRoleService {
-  id_user_role: string
+  id_brand: string
 }
 
 export const DeleteByIdRoleService = async ({
-  id_user_role,
-}: IDeleteByIdRoleService): Promise<IRole> => {
-  const roleUpdated = await prisma.userRole.update({
+  id_brand,
+}: IDeleteByIdRoleService): Promise<IBrand> => {
+  const brand = await prisma.brand.update({
     where: {
-      id_user_role,
+      id_brand,
     },
     data: {
       is_delete: true,
     },
   })
 
-  return roleUpdated
+  return brand
 }

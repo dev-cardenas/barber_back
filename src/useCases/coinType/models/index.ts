@@ -1,1 +1,1 @@
-export * from './coinType'
+export * from './coin'

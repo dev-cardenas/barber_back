@@ -2,15 +2,15 @@ import { prisma } from 'config/index'
 import { ICoinType } from '../models'
 
 interface IDeleteByIdCoinTypeService {
-  id_user_role: string
+  id_coin_type: string
 }
 
 export const DeleteByIdCoinTypeService = async ({
-  id_user_role,
+  id_coin_type,
 }: IDeleteByIdCoinTypeService): Promise<ICoinType> => {
   const coinTypeUpdated = await prisma.coinType.update({
     where: {
-      id_user_role,
+      id_coin_type,
     },
     data: {
       is_delete: true,

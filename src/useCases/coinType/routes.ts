@@ -11,9 +11,9 @@ import {
 export const api = '/api/v1'
 
 export async function rolesRoutes(app: FastifyInstance) {
-  app.post(`${api}/CoinType/create`, CreateCoinTypeController)
-  app.get(`${api}/CoinType/:id_coin_type`, GetByIdCoinTypeController)
-  app.get(`${api}/CoinType`, GetAllCoinTypeController)
-  app.put(`${api}/CoinType/update`, UpdateCoinTypeController)
-  app.delete(`${api}/CoinType/:id_coin_type`, DeleteByIdCoinTypeController)
+  app.post(`${api}/coinType/create`, CreateCoinTypeController)
+  app.get(`${api}/coinType/:id_coin_type`, GetByIdCoinTypeController)
+  app.get(`${api}/coinType`, GetAllCoinTypeController)
+  app.put(`${api}/coinType/update`, UpdateCoinTypeController)
+  app.delete(`${api}/coinType/:id_coin_type`, DeleteByIdCoinTypeController)
 }

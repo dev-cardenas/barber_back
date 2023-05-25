@@ -1,10 +1,13 @@
 import { prisma } from 'config/index'
-import { ICoinType } from '../models'
-import { ICreateRoleService } from './CreateRoleService'
+import { ICoinTypeToUpdate, ICoinType } from '../models'
+
+interface IUpdateCoinTypeService {
+  coinType: ICoinTypeToUpdate
+}
 
 export const UpdateCoinTypeService = async ({
   coinType,
-}: ICreateRoleService): Promise<ICoinType> => {
+}: IUpdateCoinTypeService): Promise<ICoinType> => {
   const { id_coin_type } = coinType
   delete coinType.id_coin_type
 

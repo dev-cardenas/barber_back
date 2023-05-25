@@ -1,15 +1,16 @@
 import { z } from 'zod'
 import { CreateCoinTypeService } from '../services/CreateCoinTypeService'
+import { ICoinType } from '../models'
 
 export const CreateCoinTypeController = async (req, reply) => {
   const { body } = req
   try {
     const coinTypeSchema = z.object({
       name: z.string().trim(),
-      description: z.string().trim(),
+      symbol: z.string().trim(),
     })
 
-    const coinType = coinTypeSchema.parse(body)
+    const coinType = coinTypeSchema.parse(body) as ICoinType
     const result = await CreateCoinTypeService({ coinType })
 
     if (result?.error) {

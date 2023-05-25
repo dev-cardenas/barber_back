@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { UpdateAccountPlanService } from '../services/UpdateAccountPlanService'
+import { IAccountPlanToUpdate } from '../models'
 
 export const UpdateAccountPlanController = async (req, reply) => {
   const { body } = req
@@ -15,7 +16,7 @@ export const UpdateAccountPlanController = async (req, reply) => {
       is_delete: z.boolean(),
     })
 
-    const accountPlan = accountPlanSchema.parse(body)
+    const accountPlan = accountPlanSchema.parse(body) as IAccountPlanToUpdate
     const result = await UpdateAccountPlanService({ accountPlan })
 
     return reply.code(200).send(result)

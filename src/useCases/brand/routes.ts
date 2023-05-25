@@ -11,9 +11,9 @@ import {
 export const api = '/api/v1'
 
 export async function rolesRoutes(app: FastifyInstance) {
-  app.post(`${api}/role/create`, CreateBrandController)
-  app.get(`${api}/role/:id_user_role`, GetByIdBrandController)
-  app.get(`${api}/role`, GetAllBrandController)
-  app.put(`${api}/role/update`, UpdateBrandController)
-  app.delete(`${api}/role/:id_user_role`, DeleteByIdBrandController)
+  app.post(`${api}/brand/create`, CreateBrandController)
+  app.get(`${api}/brand/:id_brand`, GetByIdBrandController)
+  app.get(`${api}/brand`, GetAllBrandController)
+  app.put(`${api}/brand/update`, UpdateBrandController)
+  app.delete(`${api}/brand/:id_brand`, DeleteByIdBrandController)
 }

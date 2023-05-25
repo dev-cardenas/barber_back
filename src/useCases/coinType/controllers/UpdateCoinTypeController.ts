@@ -8,7 +8,7 @@ export const UpdateCoinTypeController = async (req, reply) => {
       id_coin_type: z.string().trim(),
       name: z.string().trim(),
       symbol: z.string().trim(),
-      is_delete: z.string().trim(),
+      is_delete: z.boolean(),
     })
 
     const coinType = coinTypeSchema.parse(body)

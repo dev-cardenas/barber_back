@@ -2,11 +2,11 @@ import { prisma } from 'config/index'
 import { IAccountPlan } from '../models'
 
 export interface ICreateAccountPlanService {
-  role: IAccountPlan
+  accountPlan: IAccountPlan
 }
 
-export interface IResponseCreateAccountPlanService extends IAccountPlan {
-  name?: string
+export interface IResponseCreateAccountPlanService {
+  accountPlan?: IAccountPlan
   error?: string
 }
 
@@ -25,18 +25,9 @@ export const CreateAccountPlanService = async ({
     }
   }
 
-  if (!accountPlanSaved.name) {
-    return {
-      error: 'AccountPlan name invalid',
-    }
-  }
-
   const newAccountPlan = await prisma.accountPlan.create({
-    data: {
-      name: accountPlan.name,
-      ...accountPlan,
-    },
+    data: accountPlan,
   })
 
-  return newAccountPlan
+  return { accountPlan: newAccountPlan }
 }

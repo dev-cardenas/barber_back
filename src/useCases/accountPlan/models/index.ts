@@ -1,1 +1,1 @@
-export * from './AccountPlan'
+export * from './accountPlan'

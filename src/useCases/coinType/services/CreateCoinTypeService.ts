@@ -5,8 +5,8 @@ export interface ICreateCoinTypeService {
   coinType: ICoinType
 }
 
-export interface IResponseCreateCoinTypeService extends ICoinType {
-  id_coin_type?: string
+export interface IResponseCreateCoinTypeService {
+  coin?: ICoinType
   error?: string
 }
 
@@ -25,18 +25,9 @@ export const CreateCoinTypeService = async ({
     }
   }
 
-  if (!coinType.name) {
-    return {
-      error: 'CoinType name invalid',
-    }
-  }
-
   const newCoinType = await prisma.coinType.create({
-    data: {
-      name: coinType.name,
-      ...coinType,
-    },
+    data: coinType,
   })
 
-  return newCoinType
+  return { coin: newCoinType }
 }

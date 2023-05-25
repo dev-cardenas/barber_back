@@ -1,15 +1,19 @@
 import { z } from 'zod'
 import { CreateAccountPlanService } from '../services/CreateAccountPlanService'
+import { IAccountPlan } from '../models'
 
 export const CreateAccountPlanController = async (req, reply) => {
   const { body } = req
   try {
     const accountPlanSchema = z.object({
-      id_account_plan: z.string().trim(),
       description: z.string().trim(),
+      name: z.string().trim(),
+      code: z.string().trim(),
+      price: z.number(),
+      available_days: z.number(),
     })
 
-    const accountPlan = accountPlanSchema.parse(body)
+    const accountPlan = accountPlanSchema.parse(body) as IAccountPlan
     const result = await CreateAccountPlanService({ accountPlan })
 
     if (result?.error) {

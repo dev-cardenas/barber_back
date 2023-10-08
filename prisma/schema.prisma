@@ -11,6 +11,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model RefreshToken {
+  id_refresh_token String   @id @default(uuid())
+  token            String   @unique
+  expires_at       DateTime
+  created_at       DateTime @default(now())
+  update_at        DateTime @updatedAt
+  user             User?    @relation(fields: [user_id], references: [id_user])
+  user_id          String
+}
+
 model User {
   id_user               String           @id @default(uuid())
   name                  String?
@@ -19,6 +29,8 @@ model User {
   email                 String           @unique
   phone                 String?
   image                 String?
+  verification_code     String?
+  verified              Boolean?         @default(false)
   token                 String?
   gender                String?
   whatsapp              String?
@@ -42,6 +54,7 @@ model User {
   appointments_client   Appointments[]   @relation("appointments_client")
   appointments_provider Appointments[]   @relation("appointments_provider")
   ruc_client            RucClient?
+  refresh_token         RefreshToken[]
 }
 
 model RucClient {
@@ -56,21 +69,33 @@ model RucClient {
   user_id       String   @unique
 }
 
-model RucConfig {
-  id_ruc_config       String               @id @default(uuid())
-  ruc                 String
-  sign_digital_date   DateTime
-  version             String
-  business_name       String
-  fantasy_name        String
+model RegimeType {
+  id_regimen_type      String             @id @default(uuid())
+  percentage           Int
+  // sale de la set
+  code                 Int
+  retention_percentage Int
+  regimen_description  String?
+  is_delete            Boolean            @default(false)
+  created_at           DateTime           @default(now())
+  update_at            DateTime           @updatedAt
+  // relationship
+  ruc_config_company   RucConfigCompany[]
+}
+
+model RucConfigCompany {
+  id_ruc_config_company String   @id @default(uuid())
+  ruc                   String
+  sign_digital_date     DateTime
+  version               String
+  business_name         String
+  fantasy_name          String
   // timbrado numero
-  stamped_number      String
+  stamped_number        String
   // timbrado Fecha
-  stamped_date        String
-  // tipo contribuyente
-  taxpayer_type       String
+  stamped_date          String
+
   // tipoRegimen
-  regime_type         String
   is_delete           Boolean              @default(false)
   created_at          DateTime             @default(now())
   update_at           DateTime             @updatedAt
@@ -79,22 +104,68 @@ model RucConfig {
   establishments      Establishments[]
   company             Company              @relation(fields: [company_id], references: [id_company])
   company_id          String               @unique
+  regime_type         RegimeType?          @relation(fields: [regime_type_id], references: [id_regimen_type])
+  regime_type_id      String?
+  // tipo contribuyente
+  taxpayer_type       TaxpayerType?        @relation(fields: [taxpayer_type_id], references: [id_taxpayer_type])
+  taxpayer_type_id    String?
+  digital_signature   DigitalSignature?
+}
+
+// firma digital
+model DigitalSignature {
+  id_digital_signature  String           @id @default(uuid())
+  digital_signature     String
+  key                   String
+  key_p12               String
+  valid_from            DateTime
+  valid_until           DateTime
+  is_delete             Boolean          @default(false)
+  created_at            DateTime         @default(now())
+  update_at             DateTime         @updatedAt
+  // relationship
+  ruc_config_company    RucConfigCompany @relation(fields: [ruc_config_company_id], references: [id_ruc_config_company])
+  ruc_config_company_id String           @unique
+}
+
+// tipo contribuyente
+model TaxpayerType {
+  id_taxpayer_type   String             @id @default(uuid())
+  code               Int
+  description        String
+  is_delete          Boolean            @default(false)
+  created_at         DateTime           @default(now())
+  update_at          DateTime           @updatedAt
+  // relationship
+  ruc_config_company RucConfigCompany[]
+}
+
+model TaxType {
+  id_tax_type String   @id @default(uuid())
+  code        Int
+  percentage  String   @unique
+  description String
+  type        String
+  is_delete   Boolean  @default(false)
+  created_at  DateTime @default(now())
+  update_at   DateTime @updatedAt
+  // relationship
 }
 
 model EconomicActivities {
-  id_economic_activities String      @id @default(uuid())
+  id_economic_activities String             @id @default(uuid())
   code                   String
   description            String
-  is_delete              Boolean     @default(false)
-  created_at             DateTime    @default(now())
-  update_at              DateTime    @updatedAt
+  is_delete              Boolean            @default(false)
+  created_at             DateTime           @default(now())
+  update_at              DateTime           @updatedAt
   // relationship
-  ruc                    RucConfig[]
+  ruc                    RucConfigCompany[]
 }
 
 // see the doc https://www.npmjs.com/package/facturacionelectronicapy-xmlgen
 model Establishments {
-  id_establishments      String    @id @default(uuid())
+  id_establishments      String           @id @default(uuid())
   code                   String
   address                String
   address_one_street     String
@@ -118,11 +189,11 @@ model Establishments {
   email                  String
   // "denominacion" : "Sucursal 1",
   denomination           String
-  is_delete              Boolean   @default(false)
-  created_at             DateTime  @default(now())
-  update_at              DateTime  @updatedAt
+  is_delete              Boolean          @default(false)
+  created_at             DateTime         @default(now())
+  update_at              DateTime         @updatedAt
   // relationship
-  ruc                    RucConfig @relation(fields: [ruc_id], references: [id_ruc_config])
+  ruc                    RucConfigCompany @relation(fields: [ruc_id], references: [id_ruc_config_company])
   ruc_id                 String
 }
 
@@ -249,7 +320,7 @@ model Company {
   account_plan           AccountPlan       @relation(fields: [account_plan_id], references: [id_account_plan])
   account_plan_id        String
   tickets                Ticket[]
-  ruc                    RucConfig?
+  ruc                    RucConfigCompany?
   schedule               Schedule?
   clients                Client[]
   providers              Provider[]
@@ -261,6 +332,23 @@ model Company {
   invoice                Invoice[]
   category               Category[]
   sub_category           SubCategory[]
+  stambed                Stamped[]
+}
+
+model Stamped {
+  id_stambed      String    @id @default(uuid())
+  // Timbrado
+  // debe ser obligatoriamente 8 numeros
+  stamp_number    String
+  start_validity  DateTime
+  end_of_validity DateTime
+  is_delete       Boolean   @default(false)
+  created_at      DateTime  @default(now())
+  update_at       DateTime  @updatedAt
+  // relationship
+  company         Company?  @relation(fields: [company_id], references: [id_company])
+  company_id      String?
+  invoice         Invoice[]
 }
 
 model AccountPlan {
@@ -300,6 +388,7 @@ model TypeProduct {
 model CoinType {
   id_coin_type String   @id @default(uuid())
   name         String   @unique
+  decimals     Int
   symbol       String   @unique
   is_delete    Boolean  @default(false)
   created_at   DateTime @default(now())
@@ -533,11 +622,8 @@ model SubCategory {
 }
 
 model Invoice {
-  id_invoice            String   @id @default(uuid())
+  id_invoice            String          @id @default(uuid())
   details               String?
-  // Timbrado
-  // debe ser obligatoriamente 8 numeros
-  stamped               String?
   invoice_number        String?
   slug                  String?
   status                String?
@@ -546,18 +632,51 @@ model Invoice {
   // Valido hasta
   validity_date         DateTime
   // fecha de emisión
-  date_of_issue         DateTime
+  date_of_issue         DateTime        @default(now())
+  // fecha de rendición
+  surrender_date        DateTime
+  // fecha anulación
+  cancellation_date     DateTime
   sub_total             Int
   total                 Int
   sale_condition        String
   tax_type              Int
-  is_delete             Boolean  @default(false)
-  created_at            DateTime @default(now())
-  update_at             DateTime @updatedAt
+  is_delete             Boolean         @default(false)
+  created_at            DateTime        @default(now())
+  update_at             DateTime        @updatedAt
   // relationship
-  company               Company  @relation(fields: [company_id], references: [id_company])
+  company               Company         @relation(fields: [company_id], references: [id_company])
   company_id            String
+  date_payment_type     DatePaymentType @relation(fields: [date_payment_type_id], references: [id_date_payment_type])
+  date_payment_type_id  String
   sales                 Sale[]
+  payment               Payment[]
+  stamped               Stamped?        @relation(fields: [stamped_id], references: [id_stambed])
+  stamped_id            String?
+}
+
+model DatePaymentType {
+  id_date_payment_type String    @id @default(uuid())
+  type_payment         String
+  is_delete            Boolean   @default(false)
+  created_at           DateTime  @default(now())
+  update_at            DateTime  @updatedAt
+  // relationship
+  invoice              Invoice[]
+}
+
+model Payment {
+  id_payment    String   @id @default(uuid())
+  pay_day       DateTime
+  amount        Int
+  // interés de retraso
+  late_interest Int
+  is_delete     Boolean  @default(false)
+  created_at    DateTime @default(now())
+  update_at     DateTime @updatedAt
+  // relationship
+  invoice       Invoice  @relation(fields: [invoice_id], references: [id_invoice])
+  invoice_id    String
 }
 
 model Provider {

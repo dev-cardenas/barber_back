@@ -41,9 +41,9 @@ services:
   #     - mongogobarber
   #     - redisgobarber
   #   networks:
-  #     - barberbackend
+  #     - blacapp_backend
 
-  postgres_barber:
+  pg_blacapp:
     image: postgres
     ports:
       - '54329:5432'
@@ -52,20 +52,20 @@ services:
       # POSTGRES_HOST: 'postgres_barber'
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'docker'
-      POSTGRES_DB: 'barber'
+      POSTGRES_DB: 'blacapp'
     volumes:
       - ./src/database/db:/var/lib/postgresql_docker/data
     networks:
-      - barberbackend
+      - blacapp_backend
 
-  redis_barber:
+  redis_blacapp:
     image: redis:alpine
     container_name: cache
     ports:
       - '6379:6379'
     networks:
-      - barberbackend
+      - blacapp_backend
 
 networks:
-  barberbackend:
+  blacapp_backend:
     driver: bridge

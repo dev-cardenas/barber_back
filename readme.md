@@ -19,6 +19,8 @@ npx prisma studio
 
 ### Generate artifacts (e.g. Prisma Client)
 
+After defining your data model, you need to update your schema in the Prisma client by running
+
 ```
   npx prisma generate
 ```
@@ -32,7 +34,7 @@ npx prisma studio
 ### Create migrations from your Prisma schema, apply them to the database, generate artifacts (e.g. Prisma Client)
 
 ```
-  npx prisma migrate dev
+  npx prisma migrate dev --name {name_migration_here}
   npx prisma migrate reset
 ```
 

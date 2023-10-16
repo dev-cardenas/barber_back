@@ -22,15 +22,15 @@ model RefreshToken {
 }
 
 model User {
-  id_user               String           @id @default(uuid())
+  id_user               String                @id @default(uuid())
   name                  String?
   last_name             String?
   hours_available       String?
-  email                 String           @unique
+  email                 String                @unique
   phone                 String?
   image                 String?
   verification_code     String?
-  verified              Boolean?         @default(false)
+  verified              Boolean?              @default(false)
   token                 String?
   gender                String?
   whatsapp              String?
@@ -38,23 +38,35 @@ model User {
   country               String?
   lat                   String?
   lng                   String?
-  is_blocked            Boolean          @default(false)
+  is_blocked            Boolean               @default(false)
   password_hash         String
-  is_delete             Boolean          @default(false)
-  created_at            DateTime         @default(now())
-  update_at             DateTime         @updatedAt
+  is_delete             Boolean               @default(false)
+  created_at            DateTime              @default(now())
+  update_at             DateTime              @updatedAt
   // relationship
   roles                 UserRole[]
   permissions           UserPermission[]
-  user_company          Company?         @relation(fields: [company_id], references: [id_company])
+  user_company          Company?              @relation(fields: [company_id], references: [id_company])
   company_id            String?
   notifications         Notification[]
-  type_user             TypeUser?        @relation(fields: [type_user_id], references: [id_type_user])
+  type_user             TypeUser?             @relation(fields: [type_user_id], references: [id_type_user])
   type_user_id          String?
-  appointments_client   Appointments[]   @relation("appointments_client")
-  appointments_provider Appointments[]   @relation("appointments_provider")
+  appointments_client   Appointments[]        @relation("appointments_client")
+  appointments_provider Appointments[]        @relation("appointments_provider")
   ruc_client            RucClient?
   refresh_token         RefreshToken[]
+  sales                 SellersOnSalesOrder[]
+}
+
+model SellersOnSalesOrder {
+  user       User     @relation(fields: [user_id], references: [id_user])
+  user_id    String
+  sale       Sale     @relation(fields: [sale_id], references: [id_sale_record])
+  sale_id    String
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([user_id, sale_id])
 }
 
 model RucClient {
@@ -289,50 +301,53 @@ model Schedule {
 }
 
 model Company {
-  id_company             String            @id @default(uuid())
-  address                String?
-  company_name           String            @unique
-  description            String?
-  slug                   String?
-  city                   String
-  country                String
-  lat                    String?
-  lng                    String?
-  email                  String            @unique
-  hours_available        Int
-  link_instagram         String?
-  link_twitter           String?
-  link_facebook          String?
-  payment_date           DateTime?
-  notice_of_payment      DateTime?
-  phone                  String?
-  whatsapp               String?
-  account_recovery_email String?
-  payment_status         Boolean           @default(false)
-  is_delete              Boolean           @default(false)
-  created_at             DateTime          @default(now())
-  update_at              DateTime          @updatedAt
+  id_company                   String                         @id @default(uuid())
+  address                      String?
+  company_name                 String                         @unique
+  description                  String?
+  slug                         String?
+  city                         String
+  country                      String
+  lat                          String?
+  lng                          String?
+  email                        String                         @unique
+  hours_available              Int
+  link_instagram               String?
+  link_twitter                 String?
+  link_facebook                String?
+  payment_date                 DateTime?
+  notice_of_payment            DateTime?
+  phone                        String?
+  whatsapp                     String?
+  account_recovery_email       String?
+  payment_status               Boolean                        @default(false)
+  is_delete                    Boolean                        @default(false)
+  created_at                   DateTime                       @default(now())
+  update_at                    DateTime                       @updatedAt
   // relationship
-  product                Product[]
-  type_busisness         TypeBusisness[]
-  users                  User[]
-  products_base          ProductBase[]
-  account_plan           AccountPlan       @relation(fields: [account_plan_id], references: [id_account_plan])
-  account_plan_id        String
-  tickets                Ticket[]
-  ruc                    RucConfigCompany?
-  schedule               Schedule?
-  clients                Client[]
-  providers              Provider[]
-  sales_record           Sale[]
-  purchase_records       PurchaseRecords[]
-  inventories            Inventory[]
-  branch_office          BranchOffice[]
-  stock                  Stock[]
-  invoice                Invoice[]
-  category               Category[]
-  sub_category           SubCategory[]
-  stambed                Stamped[]
+  product                      Product[]
+  type_busisness               TypeBusisness[]
+  users                        User[]
+  products_base                ProductBase[]
+  account_plan                 AccountPlan                    @relation(fields: [account_plan_id], references: [id_account_plan])
+  account_plan_id              String
+  tickets                      Ticket[]
+  ruc                          RucConfigCompany?
+  schedule                     Schedule?
+  clients                      Client[]
+  providers                    Provider[]
+  sales_record                 Sale[]
+  purchase_records             PurchaseRecords[]
+  inventories                  Inventory[]
+  branch_office                BranchOffice[]
+  stock                        Stock[]
+  invoice                      Invoice[]
+  category                     Category[]
+  sub_category                 SubCategory[]
+  stambed                      Stamped[]
+  MaterialOnBuiltProductDetail MaterialOnBuiltProductDetail[]
+  Material                     Material[]
+  Decrease                     Decrease[]
 }
 
 model Stamped {
@@ -396,56 +411,80 @@ model CoinType {
 }
 
 model Product {
-  id_product        String                  @id @default(uuid())
-  barcode           String?                 @unique
-  color             String?
-  name              String
-  hours_and_minutes String?
+  id_product                   String                         @id @default(uuid())
+  barcode                      String?                        @unique
+  color                        String?
+  name                         String
+  hours_and_minutes            String?
   // medida
-  measure           String?
-  size              String?
-  weight            Int?
+  measure                      String?
+  size                         String?
+  weight                       Int?
   // example g, kg
-  type_weight       String?
+  type_weight                  String?
   // litro
-  liter             Int?
-  price_cost        Int?
-  price_sale        Int?
-  price_promotion   Int?
+  liter                        Int?
+  price_cost                   Int?
+  price_sale                   Int?
+  price_promotion              Int?
   // Precio mayorista
-  price_wholesaler  Int?
-  product_code      String?                 @unique
-  product_sku       String?
-  images            String?
-  erase_code        String?
-  description       String?
-  slug              String?
-  tags              String?
-  assessment        String?
-  features          String?
-  lote              String?
-  is_public         Boolean                 @default(false)
-  is_delete         Boolean                 @default(false)
-  created_at        DateTime                @default(now())
-  update_at         DateTime                @updatedAt
+  price_wholesaler             Int?
+  product_code                 String?                        @unique
+  product_sku                  String?
+  images                       String?
+  erase_code                   String?
+  description                  String?
+  slug                         String?
+  tags                         String?
+  assessment                   String?
+  features                     String?
+  lote                         String?
+  is_public                    Boolean                        @default(false)
+  is_manufactured              Boolean                        @default(false)
+  // manufacture details
+  production_cost              Int
+  maximum_discount_allowed     Int
+  // = production_cost + percentage_of_profit
+  // y es igual al resale price (precio de venta)
+  price_base                   Int
+  // garantia
+  warranty                     String
+  // porcentaje de ganancia
+  percentage_of_profit         Int
+  // porcentaje de ganancia para vendedor
+  profit_percentage_for_seller Int
+  unit_type_value              String
+  // por si un producto nuevo construido subio su precio de costo
+  //  almacena el nuevo hasta que se acabe el viejo
+  new_price_id                 String?
+  current_price_id             String?
+  new_stock_id                 String?
+  current_stock_id             String?
+  is_delete                    Boolean                        @default(false)
+  created_at                   DateTime                       @default(now())
+  update_at                    DateTime                       @updatedAt
   // relationship
-  sale_details      SaleDetail[]
-  buy_details       PurchaseRecordsDetail[]
-  brand             Brand?                  @relation(fields: [brand_id], references: [id_brand])
-  brand_id          String?
-  company           Company?                @relation(fields: [company_id], references: [id_company])
-  company_id        String?
-  categories        Category[]
-  sub_categories    SubCategory[]
-  base_product      ProductBase?            @relation(fields: [base_product_id], references: [id_product_base])
-  base_product_id   String?
-  history           ProductPriceHistory[]
-  tax               Tax?                    @relation(fields: [tax_id], references: [id_tax])
-  tax_id            String?
-  type_product      TypeProduct?            @relation(fields: [type_product_id], references: [id_type_product])
-  type_product_id   String?
-  providers         Provider[]
-  inventories       Inventory[]
+  sale_details                 SaleDetail[]
+  buy_details                  PurchaseRecordsDetail[]
+  brand                        Brand?                         @relation(fields: [brand_id], references: [id_brand])
+  brand_id                     String?
+  company                      Company?                       @relation(fields: [company_id], references: [id_company])
+  company_id                   String?
+  categories                   Category[]
+  sub_categories               SubCategory[]
+  base_product                 ProductBase?                   @relation(fields: [base_product_id], references: [id_product_base])
+  base_product_id              String?
+  history                      ProductPriceHistory[]
+  tax                          Tax?                           @relation(fields: [tax_id], references: [id_tax])
+  tax_id                       String?
+  type_product                 TypeProduct?                   @relation(fields: [type_product_id], references: [id_type_product])
+  type_product_id              String?
+  providers                    Provider[]
+  inventories                  Inventory[]
+  decrease                     Decrease?
+  unit_type                    UnitType?                      @relation(fields: [unit_type_id], references: [id_unit_type])
+  unit_type_id                 String?
+  material_on_built_product    MaterialOnBuiltProductDetail[]
 }
 
 model ProductBase {
@@ -700,26 +739,72 @@ model Provider {
   company_id    String
 }
 
+model TypePaymentSale {
+  id_type_payment_sale String   @id @default(uuid())
+  type_payment_sale    String
+  // cantidad de cuotas
+  amount_of_fees       Int
+  is_delete            Boolean  @default(false)
+  created_at           DateTime @default(now())
+  update_at            DateTime @updatedAt
+  Sale                 Sale[]
+}
+
+model Receipt {
+  id_receipt   String   @id @default(uuid())
+  quota_number Int
+  interest     Int
+  payment_date DateTime
+  is_delete    Boolean  @default(false)
+  created_at   DateTime @default(now())
+  update_at    DateTime @updatedAt
+  Sale         Sale?    @relation(fields: [sale_id], references: [id_sale_record])
+  sale_id      String?
+}
+
+model TypeSale {
+  id_type_sale String   @id @default(uuid())
+  type_sale    String
+  is_delete    Boolean  @default(false)
+  created_at   DateTime @default(now())
+  update_at    DateTime @updatedAt
+  Sale         Sale[]
+}
+
 model Sale {
-  id_sale_record String       @id @default(uuid())
-  address        String?
-  is_canceled    Boolean      @default(false)
-  is_delete      Boolean      @default(false)
-  created_at     DateTime     @default(now())
-  update_at      DateTime     @updatedAt
+  id_sale_record            String                @id @default(uuid())
+  address                   String?
+  total_price               Int
+  seller_profit             Int
+  current_payment_to_seller Int
+  company_profit            Int
+  current_payment           Int
+  discount                  Int
+  // cuando inicia la garantia
+  waranty_initial           DateTime
+  is_canceled               Boolean               @default(false)
+  is_delete                 Boolean               @default(false)
+  created_at                DateTime              @default(now())
+  update_at                 DateTime              @updatedAt
   // relationship
-  sale_details   SaleDetail[]
-  company        Company      @relation(fields: [company_id], references: [id_company])
-  company_id     String
-  client         Client       @relation(fields: [client_id], references: [id_client])
-  client_id      String
-  ticket         Ticket[]
-  invoice        Invoice[]
+  sale_details              SaleDetail[]
+  company                   Company               @relation(fields: [company_id], references: [id_company])
+  company_id                String
+  client                    Client                @relation(fields: [client_id], references: [id_client])
+  client_id                 String
+  ticket                    Ticket[]
+  invoice                   Invoice[]
+  sellers                   SellersOnSalesOrder[]
+  receipt                   Receipt[]
+  type_sale                 TypeSale              @relation(fields: [type_sale_id], references: [id_type_sale])
+  type_sale_id              String
+  type_payment_sale         TypePaymentSale?      @relation(fields: [type_payment_sale_id], references: [id_type_payment_sale])
+  type_payment_sale_id      String?
 }
 
 model SaleDetail {
   id_sale_record_detail String   @id @default(uuid())
-  price                 Int
+  total_price           Int
   quantity              Int
   is_canceled           Boolean  @default(false)
   is_delete             Boolean  @default(false)
@@ -818,12 +903,92 @@ view Stock {
   quantity         Int
   min_quantity     Int?
   max_quantity     Int?
+  is_delete        Boolean      @default(false)
+  created_at       DateTime     @default(now())
+  update_at        DateTime     @updatedAt
+  // relationship
   company          Company      @relation(fields: [company_id], references: [id_company])
   company_id       String
   branch_office    BranchOffice @relation(fields: [branch_office_id], references: [id_branch_office])
   branch_office_id String
   inventory        Inventory    @relation(fields: [inventory_id], references: [id_inventory])
   inventory_id     String
+}
+
+// Materiales sobre detalle del producto construido
+model MaterialOnBuiltProductDetail {
+  built_product           Product  @relation(fields: [built_product_detail_id], references: [id_product])
+  built_product_detail_id String
+  material                Material @relation(fields: [material_id], references: [id_material])
+  material_id             String
+  assigned_at             DateTime @default(now())
+  company                 Company  @relation(fields: [company_id], references: [id_company])
+  company_id              String
+
+  @@id([built_product_detail_id, material_id])
+}
+
+model Material {
+  id_material                      String                         @id @default(uuid())
+  name                             String
+  current_price                    Int
+  quantity                         Int
+  max_quantity                     Int
+  min_quantity                     Int
+  unit_type_value                  String
+  is_delete                        Boolean                        @default(false)
+  created_at                       DateTime                       @default(now())
+  update_at                        DateTime                       @updatedAt
+  // relationship
+  history_material_price           HistoryMaterialPrice[]
+  company                          Company                        @relation(fields: [company_id], references: [id_company])
+  company_id                       String
+  unit_type                        UnitType?                      @relation(fields: [unit_type_id], references: [id_unit_type])
+  unit_type_id                     String?
+  material_on_built_product_detail MaterialOnBuiltProductDetail[]
+}
+
+model UnitType {
+  id_unit_type   String     @id @default(uuid())
+  unit_type      String
+  code           String
+  representation String
+  description    String
+  is_delete      Boolean    @default(false)
+  created_at     DateTime   @default(now())
+  update_at      DateTime   @updatedAt
+  // relationship
+  material       Material[]
+  product        Product[]
+  decrease       Decrease[]
+}
+
+model HistoryMaterialPrice {
+  id_history_material_price String    @id @default(uuid())
+  price                     Int
+  is_delete                 Boolean   @default(false)
+  created_at                DateTime  @default(now())
+  update_at                 DateTime  @updatedAt
+  // relationship
+  material                  Material? @relation(fields: [material_id], references: [id_material])
+  material_id               String?
+}
+
+model Decrease {
+  id_decrease     String    @id @default(uuid())
+  name            String
+  loss_price      String
+  unit_type_value String
+  is_delete       Boolean   @default(false)
+  created_at      DateTime  @default(now())
+  update_at       DateTime  @updatedAt
+  // relationship
+  company         Company   @relation(fields: [company_id], references: [id_company])
+  company_id      String
+  product         Product?  @relation(fields: [product_id], references: [id_product])
+  product_id      String?   @unique
+  unit_type       UnitType? @relation(fields: [unit_type_id], references: [id_unit_type])
+  unit_type_id    String?
 }
 
 // CREATE OR REPLACE VIEW stock AS
@@ -880,3 +1045,7 @@ view Stock {
 //   .finally(async () => {
 //     await prisma.$disconnect();
 //   });
+
+// "prisma": {
+//   "seed": "ts-node prisma/seed.ts"
+// },

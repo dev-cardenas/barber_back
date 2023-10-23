@@ -56,6 +56,8 @@ model User {
   ruc_client            RucClient?
   refresh_token         RefreshToken[]
   sales                 SellersOnSalesOrder[]
+  branch_office         BranchOffice          @relation(fields: [branch_office_id], references: [id_branch_office])
+  branch_office_id      String
 }
 
 model SellersOnSalesOrder {
@@ -470,6 +472,8 @@ model Product {
   brand_id                     String?
   company                      Company?                       @relation(fields: [company_id], references: [id_company])
   company_id                   String?
+  branch_office                BranchOffice                   @relation(fields: [branch_office_id], references: [id_branch_office])
+  branch_office_id             String
   categories                   Category[]
   sub_categories               SubCategory[]
   base_product                 ProductBase?                   @relation(fields: [base_product_id], references: [id_product_base])
@@ -596,6 +600,8 @@ model Inventory {
   inventory_section_id String
   company              Company          @relation(fields: [company_id], references: [id_company])
   company_id           String
+  branch_office        BranchOffice     @relation(fields: [branch_office_id], references: [id_branch_office])
+  branch_office_id     String
   Stock                Stock[]
 }
 
@@ -686,6 +692,8 @@ model Invoice {
   // relationship
   company               Company         @relation(fields: [company_id], references: [id_company])
   company_id            String
+  branch_office         BranchOffice    @relation(fields: [branch_office_id], references: [id_branch_office])
+  branch_office_id      String
   date_payment_type     DatePaymentType @relation(fields: [date_payment_type_id], references: [id_date_payment_type])
   date_payment_type_id  String
   sales                 Sale[]
@@ -719,24 +727,26 @@ model Payment {
 }
 
 model Provider {
-  id_provider   String        @id @default(uuid())
-  name          String
-  business_name String?
-  address       String?
-  email         String?
-  slug          String?
-  ruc           String?
-  ci            String?
-  phone         String?
-  whatsapp      String?
-  is_delete     Boolean       @default(false)
-  created_at    DateTime      @default(now())
-  update_at     DateTime      @updatedAt
+  id_provider      String        @id @default(uuid())
+  name             String
+  business_name    String?
+  address          String?
+  email            String?
+  slug             String?
+  ruc              String?
+  ci               String?
+  phone            String?
+  whatsapp         String?
+  is_delete        Boolean       @default(false)
+  created_at       DateTime      @default(now())
+  update_at        DateTime      @updatedAt
   // relationship
-  products      Product[]
-  products_base ProductBase[]
-  company       Company       @relation(fields: [company_id], references: [id_company])
-  company_id    String
+  products         Product[]
+  products_base    ProductBase[]
+  company          Company       @relation(fields: [company_id], references: [id_company])
+  company_id       String
+  branch_office    BranchOffice  @relation(fields: [branch_office_id], references: [id_branch_office])
+  branch_office_id String
 }
 
 model TypePaymentSale {
@@ -790,6 +800,8 @@ model Sale {
   sale_details              SaleDetail[]
   company                   Company               @relation(fields: [company_id], references: [id_company])
   company_id                String
+  branch_office             BranchOffice          @relation(fields: [branch_office_id], references: [id_branch_office])
+  branch_office_id          String
   client                    Client                @relation(fields: [client_id], references: [id_client])
   client_id                 String
   ticket                    Ticket[]
@@ -836,16 +848,18 @@ model Client {
 }
 
 model Ticket {
-  id_ticket      String   @id @default(uuid())
-  is_canceled    Boolean  @default(false)
-  is_delete      Boolean  @default(false)
-  created_at     DateTime @default(now())
-  update_at      DateTime @updatedAt
+  id_ticket        String       @id @default(uuid())
+  is_canceled      Boolean      @default(false)
+  is_delete        Boolean      @default(false)
+  created_at       DateTime     @default(now())
+  update_at        DateTime     @updatedAt
   // relationship
-  company        Company  @relation(fields: [company_id], references: [id_company])
-  company_id     String
-  sale_record    Sale     @relation(fields: [sale_record_id], references: [id_sale_record])
-  sale_record_id String
+  company          Company      @relation(fields: [company_id], references: [id_company])
+  company_id       String
+  branch_office    BranchOffice @relation(fields: [branch_office_id], references: [id_branch_office])
+  branch_office_id String
+  sale_record      Sale         @relation(fields: [sale_record_id], references: [id_sale_record])
+  sale_record_id   String
 }
 
 // registro de compra
@@ -860,6 +874,8 @@ model PurchaseRecords {
   details            PurchaseRecordsDetail[]
   company            Company                 @relation(fields: [company_id], references: [id_company])
   company_id         String
+  branch_office      BranchOffice            @relation(fields: [branch_office_id], references: [id_branch_office])
+  branch_office_id   String
 }
 
 model PurchaseRecordsDetail {
@@ -878,7 +894,7 @@ model PurchaseRecordsDetail {
 }
 
 model BranchOffice {
-  id_branch_office String   @id @default(uuid())
+  id_branch_office String            @id @default(uuid())
   name             String
   description      String?
   direction        String?
@@ -889,13 +905,23 @@ model BranchOffice {
   city             String
   country          String
   department       String
-  is_delete        Boolean  @default(false)
-  created_at       DateTime @default(now())
-  update_at        DateTime @updatedAt
+  is_delete        Boolean           @default(false)
+  created_at       DateTime          @default(now())
+  update_at        DateTime          @updatedAt
   // relationship
-  company          Company  @relation(fields: [company_id], references: [id_company])
+  company          Company           @relation(fields: [company_id], references: [id_company])
   company_id       String
   stock            Stock[]
+  user             User[]
+  product          Product[]
+  inventory        Inventory[]
+  invoice          Invoice[]
+  provider         Provider[]
+  sale             Sale[]
+  ticket           Ticket[]
+  purchaseRecords  PurchaseRecords[]
+  material         Material[]
+  decrease         Decrease[]
 }
 
 view Stock {
@@ -943,6 +969,8 @@ model Material {
   history_material_price           HistoryMaterialPrice[]
   company                          Company                        @relation(fields: [company_id], references: [id_company])
   company_id                       String
+  branch_office                    BranchOffice                   @relation(fields: [branch_office_id], references: [id_branch_office])
+  branch_office_id                 String
   unit_type                        UnitType?                      @relation(fields: [unit_type_id], references: [id_unit_type])
   unit_type_id                     String?
   material_on_built_product_detail MaterialOnBuiltProductDetail[]
@@ -975,20 +1003,22 @@ model HistoryMaterialPrice {
 }
 
 model Decrease {
-  id_decrease     String    @id @default(uuid())
-  name            String
-  loss_price      String
-  unit_type_value String
-  is_delete       Boolean   @default(false)
-  created_at      DateTime  @default(now())
-  update_at       DateTime  @updatedAt
+  id_decrease      String       @id @default(uuid())
+  name             String
+  loss_price       String
+  unit_type_value  String
+  is_delete        Boolean      @default(false)
+  created_at       DateTime     @default(now())
+  update_at        DateTime     @updatedAt
   // relationship
-  company         Company   @relation(fields: [company_id], references: [id_company])
-  company_id      String
-  product         Product?  @relation(fields: [product_id], references: [id_product])
-  product_id      String?   @unique
-  unit_type       UnitType? @relation(fields: [unit_type_id], references: [id_unit_type])
-  unit_type_id    String?
+  company          Company      @relation(fields: [company_id], references: [id_company])
+  company_id       String
+  branch_office    BranchOffice @relation(fields: [branch_office_id], references: [id_branch_office])
+  branch_office_id String
+  product          Product?     @relation(fields: [product_id], references: [id_product])
+  product_id       String?      @unique
+  unit_type        UnitType?    @relation(fields: [unit_type_id], references: [id_unit_type])
+  unit_type_id     String?
 }
 
 // CREATE OR REPLACE VIEW stock AS
